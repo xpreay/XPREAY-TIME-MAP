@@ -1314,16 +1314,34 @@
       border: 1px solid var(--line);
       background: var(--panel);
       padding: 20px;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .window-card:hover {
+      border-color: color-mix(in srgb, var(--eu) 42%, var(--line));
+      background: color-mix(in srgb, var(--panel) 94%, var(--soft));
+    }
+
+    .window-main {
+      min-width: 0;
+    }
+
+    .window-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 9px;
     }
 
     .window-card h3 {
-      margin: 8px 0 0;
+      margin: 0;
       font-size: var(--h3);
       line-height: 1.2;
     }
 
     .window-card p {
-      margin: 7px 0 0;
+      margin: 8px 0 0;
       color: var(--muted);
       line-height: 1.45;
     }
@@ -1332,7 +1350,9 @@
       display: flex;
       flex-wrap: wrap;
       gap: 7px 8px;
-      margin-top: 16px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
     }
 
     .mini-tag {
@@ -1347,6 +1367,17 @@
       font-weight: 750;
       letter-spacing: .055em;
       text-transform: uppercase;
+    }
+
+    .mini-tag.priority {
+      border-color: color-mix(in srgb, var(--eu) 44%, var(--line));
+      color: var(--ink);
+      background: color-mix(in srgb, var(--eu) 14%, transparent);
+    }
+
+    .mini-tag.clock {
+      border-color: color-mix(in srgb, var(--macro) 42%, var(--line));
+      color: color-mix(in srgb, var(--ink) 82%, var(--macro));
     }
 
     .window-meta {
@@ -3445,6 +3476,86 @@
       return 'ny';
     }
 
+    function categoryLabel(category) {
+      return {
+        ict: 'Koncept',
+        sessions: 'Sesja',
+        official: 'Oficjalne',
+        macros: 'Makro',
+        cme: 'CME'
+      }[category] || category;
+    }
+
+    function marketLabel(market) {
+      return {
+        all: 'Multi-market',
+        futures: 'FX / futures',
+        indices: 'Indeksy'
+      }[market] || market;
+    }
+
+    function clockLabel(clock) {
+      return {
+        ny: 'NY time',
+        europe: 'Europa / London',
+        tokyo: 'Tokyo / Asia',
+        cme: 'CME / CT'
+      }[clock] || clock;
+    }
+
+    function tagLabel(tag) {
+      return {
+        ny: 'New York',
+        reference: 'Reference',
+        europe: 'Europa',
+        london: 'London',
+        forex: 'Forex',
+        fx: 'FX',
+        'europe-index': 'Indeksy EU',
+        tokyo: 'Tokyo',
+        asia: 'Asia',
+        indices: 'Indeksy',
+        'us-index': 'Indeksy USA',
+        cash: 'Cash',
+        data: 'Dane USA',
+        metal: 'Metale',
+        commodity: 'Surowce',
+        'cme-fx': 'CME FX',
+        'cme-index': 'CME Index',
+        'cme-energy': 'CME Energy',
+        'official-us': 'US official',
+        'official-eu': 'EU official',
+        silver: 'Silver Bullet',
+        lunch: 'Lunch',
+        'ny-cut': 'NY Cut',
+        cbdr: 'CBDR',
+        fix: 'Fix',
+        bond: 'Bonds'
+      }[tag] || tag.replaceAll('-', ' ');
+    }
+
+    function displayTags(item) {
+      const sourceWords = item.source.toLowerCase();
+      const raw = [
+        { label: categoryLabel(item.category), cls: 'priority' },
+        { label: marketLabel(item.market), cls: '' },
+        { label: clockLabel(item.clock), cls: 'clock' },
+        ...item.tags.map((tag) => ({ label: tagLabel(tag), cls: '' }))
+      ];
+
+      const seen = new Set();
+      return raw
+        .map((tag) => ({ ...tag, key: tag.label.toLowerCase() }))
+        .filter((tag) => {
+          if (seen.has(tag.key)) return false;
+          seen.add(tag.key);
+          if (tag.key.length <= 2 && sourceWords.includes(tag.key)) return false;
+          if (sourceWords.includes(tag.key) && tag.cls !== 'clock') return false;
+          return true;
+        })
+        .slice(0, 6);
+    }
+
     function currentProfile() {
       return libraryProfiles.find((profile) => profile.id === activeLibraryInstrument) || libraryProfiles[0];
     }
@@ -3487,14 +3598,14 @@
 
       timeLibraryResults.innerHTML = items.length ? items.map((item) => `
         <article class="window-card">
-          <div>
-            <span class="tag ${tagClass(item)}">${item.source}</span>
+          <div class="window-main">
+            <div class="window-head">
+              <span class="tag ${tagClass(item)}">${item.source}</span>
+            </div>
             <h3>${item.title}</h3>
             <p>${item.note}</p>
             <div class="window-tags">
-              <span class="mini-tag">${item.category}</span>
-              <span class="mini-tag">${item.market === 'futures' ? 'Forex / futures' : item.market === 'indices' ? 'Indeksy' : 'Multi-market'}</span>
-              ${item.tags.slice(0, 5).map((tag) => `<span class="mini-tag">${tag}</span>`).join('')}
+              ${displayTags(item).map((tag) => `<span class="mini-tag ${tag.cls}">${tag.label}</span>`).join('')}
             </div>
           </div>
           <div class="window-meta">
