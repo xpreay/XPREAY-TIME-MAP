@@ -1,0 +1,2727 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ICT Trading Hours - NY, Polska, zmiana czasu</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #111318;
+      --muted: #5e6470;
+      --line: #d9d6ce;
+      --panel: #ffffff;
+      --paper: #f5f2ea;
+      --soft: #ebe7dd;
+      --ny: #c63824;
+      --eu: #2867d8;
+      --cme: #a46a12;
+      --macro: #583b92;
+      --asia: #8a53c7;
+      --good: #14725f;
+      --shadow: 0 16px 40px rgba(17, 19, 24, .08);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #f4f1e8;
+      --muted: #b9b4aa;
+      --line: #3d3a33;
+      --panel: #161719;
+      --paper: #0f1012;
+      --soft: #202126;
+      --ny: #f05a43;
+      --eu: #6b96ff;
+      --cme: #d9912b;
+      --macro: #9b79ef;
+      --asia: #b678f2;
+      --good: #2daf91;
+      --shadow: 0 16px 40px rgba(0, 0, 0, .32);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fbfaf7 0%, var(--paper) 100%);
+      letter-spacing: 0;
+      padding-top: 58px;
+    }
+
+    [data-theme="dark"] body {
+      background: linear-gradient(180deg, #111215 0%, var(--paper) 100%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 56px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
+      gap: 28px;
+      align-items: end;
+      padding: 10px 0 28px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ny);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--ny);
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      max-width: 980px;
+      font-size: clamp(32px, 5vw, 62px);
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 760px;
+      color: #3d4149;
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .quick-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .quick-panel h2,
+    .section-title h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .day-brief {
+      margin-top: 14px;
+      padding: 12px;
+      background: #111318;
+      color: #fff;
+    }
+
+    .day-brief span {
+      display: block;
+      margin-bottom: 6px;
+      color: rgba(255, 255, 255, .72);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .day-brief strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .day-brief p {
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, .78);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .quick-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .quick-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .quick-item strong {
+      color: var(--ink);
+      font-size: 16px;
+    }
+
+    .controls {
+      position: sticky;
+      top: 58px;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 18px 0 24px;
+      padding: 12px;
+      background: rgba(245, 242, 234, .92);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+
+    .page-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 0;
+      padding: 10px max(16px, calc((100vw - 1220px) / 2));
+      background: rgba(255, 255, 255, .94);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 10px 28px rgba(17, 19, 24, .08);
+      backdrop-filter: blur(16px);
+    }
+
+    .page-menu a,
+    .page-menu button {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 750;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .page-menu a:hover,
+    .page-menu button:hover {
+      background: var(--ink);
+      color: var(--panel);
+    }
+
+    .page-menu .brand-link {
+      color: var(--ny);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-right: 8px;
+    }
+
+    .page-menu .theme-nav {
+      margin-left: auto;
+      border: 1px solid var(--line);
+      gap: 7px;
+    }
+
+    .theme-icon {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .control-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .market-label {
+      flex-basis: 100%;
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease, border-color .18s ease;
+    }
+
+    .pill[aria-pressed="true"] {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+    }
+
+    .search {
+      min-width: min(280px, 100%);
+      min-height: 38px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 8px 12px;
+      color: var(--ink);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 20px 0;
+    }
+
+    .info-band {
+      background: var(--ink);
+      color: #fff;
+      padding: 20px;
+    }
+
+    .info-band h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .info-band p {
+      margin: 0;
+      color: #e3e0d8;
+      line-height: 1.55;
+    }
+
+    .note {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 20px;
+    }
+
+    .note h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .note ul {
+      margin: 0;
+      padding-left: 19px;
+      color: #333842;
+      line-height: 1.55;
+    }
+
+    section {
+      margin-top: 30px;
+    }
+
+    .section-title {
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .section-title p {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #e8e3d8;
+      border-bottom: 2px solid var(--ink);
+      color: #4f535b;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-align: left;
+      text-transform: uppercase;
+      padding: 13px 14px;
+    }
+
+    td {
+      border-bottom: 1px solid #e6e1d6;
+      padding: 14px;
+      vertical-align: top;
+      line-height: 1.35;
+    }
+
+    tbody tr {
+      background: #fff;
+      transition: background .16s ease;
+    }
+
+    tbody tr:hover,
+    tbody tr.is-open {
+      background: #fbf8ef;
+    }
+
+    .time {
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .tag.ny { background: var(--ny); }
+    .tag.eu { background: var(--eu); }
+    .tag.cme { background: var(--cme); }
+    .tag.macro { background: var(--macro); }
+    .tag.asia { background: var(--asia); }
+    .tag.fixed { background: var(--good); }
+
+    .row-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .detail {
+      display: none;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    tr.is-open .detail {
+      display: block;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .period {
+      position: relative;
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr) 170px;
+      gap: 12px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+
+    .period.current {
+      margin-top: 18px;
+      border-color: var(--line);
+      box-shadow: inset 0 -3px 0 var(--ny), var(--shadow);
+    }
+
+    .period.current::before {
+      content: "obecnie";
+      position: absolute;
+      top: -16px;
+      left: 14px;
+      color: var(--ny);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .period strong {
+      display: block;
+    }
+
+    .year-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .year-select {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .bar {
+      position: relative;
+      height: 18px;
+      background: linear-gradient(90deg, #2867d8 0%, #2867d8 var(--w), #e2ded3 var(--w), #e2ded3 100%);
+      border: 1px solid #cfc9bc;
+    }
+
+
+    .period.transition .bar {
+      background: linear-gradient(90deg, #c63824 0%, #c63824 var(--w), #e2ded3 var(--w), #e2ded3 100%);
+    }
+
+    .callout-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .time-axis {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 30px 16px 16px;
+    }
+
+    .axis-status {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 1px;
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .axis-status div {
+      min-width: 0;
+      background: var(--panel);
+      padding: 10px;
+    }
+
+    .axis-status span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .axis-status strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .axis-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .axis-controls .market-note {
+      flex-basis: 100%;
+      margin: 0;
+    }
+
+    .axis-toggle {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      min-height: 22px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.25;
+    }
+
+    .axis-toggle input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: var(--ny);
+    }
+
+    .axis-row {
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .axis-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .axis-track {
+      position: relative;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, transparent 0, transparent calc(25% - 1px), rgba(120, 120, 120, .28) calc(25% - 1px), rgba(120, 120, 120, .28) 25%, transparent 25%),
+        linear-gradient(90deg, transparent 0, transparent calc(50% - 1px), rgba(120, 120, 120, .28) calc(50% - 1px), rgba(120, 120, 120, .28) 50%, transparent 50%),
+        linear-gradient(90deg, transparent 0, transparent calc(75% - 1px), rgba(120, 120, 120, .28) calc(75% - 1px), rgba(120, 120, 120, .28) 75%, transparent 75%),
+        var(--soft);
+      overflow: hidden;
+    }
+
+    .axis-bar {
+      position: absolute;
+      top: 7px;
+      left: var(--start);
+      width: var(--width);
+      min-width: 6px;
+      min-height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      background: var(--ink);
+      color: var(--panel);
+      font-size: 11px;
+      font-weight: 850;
+      text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .axis-bar.compact,
+    .axis-bar.tiny {
+      color: transparent;
+    }
+
+    .axis-bar.tiny {
+      padding: 0;
+      min-width: 8px;
+    }
+
+    .axis-bar:hover {
+      z-index: 6;
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    .axis-details {
+      position: fixed;
+      left: 16px;
+      top: 80px;
+      z-index: 80;
+      width: min(380px, calc(100vw - 24px));
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: opacity .12s ease, transform .12s ease, visibility .12s ease;
+    }
+
+    .axis-details h3 {
+      margin: 6px 0 8px;
+      font-size: 17px;
+    }
+
+    .axis-details p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .axis-details .mini-grid div {
+      grid-template-columns: 64px 1fr;
+    }
+
+    .axis-details.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .axis-bar.eu { background: var(--eu); color: #fff; }
+    .axis-bar.ny { background: var(--ny); color: #fff; }
+    .axis-bar.asia { background: var(--asia); color: #fff; }
+    .axis-bar.cme { background: var(--cme); color: #fff; }
+    .axis-bar.macro { background: var(--macro); color: #fff; }
+
+    .axis-pin {
+      position: absolute;
+      top: 4px;
+      left: var(--x);
+      width: 2px;
+      height: 34px;
+      background: var(--ink);
+    }
+
+    .axis-now-line {
+      position: absolute;
+      top: 30px;
+      bottom: 16px;
+      left: var(--now-x, 0px);
+      width: 2px;
+      background: var(--ny);
+      z-index: 9;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .55);
+      pointer-events: none;
+    }
+
+    .axis-now-line::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -5px;
+      width: 8px;
+      height: 8px;
+      background: var(--ny);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .axis-now-line::after {
+      content: "teraz · " attr(data-now);
+      position: absolute;
+      left: 6px;
+      top: -24px;
+      width: max-content;
+      max-width: 160px;
+      background: var(--ny);
+      color: #fff;
+      padding: 3px 6px;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow);
+    }
+
+    .axis-now-line.is-hidden {
+      display: none;
+    }
+
+    .axis-hours {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      color: var(--muted);
+      font-size: 11px;
+      padding: 0 2px;
+    }
+
+    .current-panel {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 14px;
+      margin-top: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .date-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .date-input {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    .moment-select {
+      min-height: 38px;
+      min-width: min(360px, 100%);
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    .moment-card {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      padding: 14px;
+    }
+
+    .instrument-tool {
+      display: grid;
+      gap: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .instrument-input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 10px 12px;
+      font: inherit;
+    }
+
+    .instrument-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .instrument-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px;
+    }
+
+    .instrument-card h3 {
+      margin: 8px 0 8px;
+      font-size: 20px;
+    }
+
+    .instrument-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    #key-moments,
+    #asia-tokyo,
+    #sessions,
+    #advanced-concepts,
+    #macros,
+    #cme,
+    #instrument-library {
+      display: none !important;
+    }
+
+    .library-shell {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .library-tools {
+      display: grid;
+      grid-template-columns: minmax(220px, .8fr) minmax(180px, .55fr) minmax(240px, .8fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .library-tools select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    .library-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 14px;
+    }
+
+    .library-summary {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .library-summary h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .library-summary p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .window-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .window-card {
+      display: grid;
+      grid-template-columns: minmax(210px, .8fr) minmax(260px, 1.2fr);
+      gap: 12px;
+      align-items: start;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 12px;
+    }
+
+    .window-card h3 {
+      margin: 8px 0 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .window-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .window-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 3px 7px;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .window-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .window-meta div {
+      background: var(--panel);
+      padding: 9px;
+      min-width: 0;
+    }
+
+    .window-meta span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .window-meta strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .empty-state {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      padding: 16px;
+      color: var(--muted);
+    }
+
+    .mini-grid {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .mini-grid div {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 7px;
+    }
+
+    .mini-grid span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .callout {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 14px;
+    }
+
+    .callout .label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .callout strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 22px;
+    }
+
+    .foot {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .market-note {
+      flex-basis: 100%;
+      margin: -2px 0 2px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    [data-theme="dark"] .quick-item,
+    [data-theme="dark"] .quick-item strong,
+    [data-theme="dark"] .callout strong,
+    [data-theme="dark"] .time,
+    [data-theme="dark"] h1,
+    [data-theme="dark"] h2 {
+      color: var(--ink);
+    }
+
+    [data-theme="dark"] .lede,
+    [data-theme="dark"] .note ul,
+    [data-theme="dark"] .section-title p,
+    [data-theme="dark"] .foot,
+    [data-theme="dark"] .market-note {
+      color: var(--muted);
+    }
+
+    [data-theme="dark"] .quick-panel,
+    [data-theme="dark"] .note,
+    [data-theme="dark"] .info-band,
+    [data-theme="dark"] .table-wrap,
+    [data-theme="dark"] .period,
+    [data-theme="dark"] .callout,
+    [data-theme="dark"] .instrument-tool,
+    [data-theme="dark"] .instrument-card,
+    [data-theme="dark"] .instrument-input,
+    [data-theme="dark"] .library-shell,
+    [data-theme="dark"] .library-tools select,
+    [data-theme="dark"] .library-summary,
+    [data-theme="dark"] .window-card,
+    [data-theme="dark"] .window-meta div,
+    [data-theme="dark"] .empty-state,
+    [data-theme="dark"] .date-input,
+    [data-theme="dark"] .moment-select,
+    [data-theme="dark"] .moment-card,
+    [data-theme="dark"] .axis-details,
+    [data-theme="dark"] .axis-controls,
+    [data-theme="dark"] .current-panel,
+    [data-theme="dark"] .page-menu a,
+    [data-theme="dark"] .page-menu button,
+    [data-theme="dark"] .pill,
+    [data-theme="dark"] .search,
+    [data-theme="dark"] .year-select {
+      background: var(--panel);
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    [data-theme="dark"] .info-band p {
+      color: var(--muted);
+    }
+
+    [data-theme="dark"] .page-menu a:hover,
+    [data-theme="dark"] .page-menu button:hover {
+      background: var(--ink);
+      color: var(--panel);
+      border-color: var(--ink);
+    }
+
+    [data-theme="dark"] .controls {
+      background: rgba(15, 16, 18, .92);
+      border-color: var(--line);
+    }
+
+    [data-theme="dark"] .page-menu {
+      background: rgba(15, 16, 18, .94);
+      border-color: var(--line);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .38);
+    }
+
+    [data-theme="dark"] th {
+      background: #24231f;
+      color: #cbc5b8;
+      border-bottom-color: var(--ink);
+    }
+
+    [data-theme="dark"] tbody tr {
+      background: #17181b;
+    }
+
+    [data-theme="dark"] tbody tr:hover,
+    [data-theme="dark"] tbody tr.is-open {
+      background: #202126;
+    }
+
+    [data-theme="dark"] td {
+      border-bottom-color: #333029;
+    }
+
+    [data-theme="dark"] .bar {
+      background: linear-gradient(90deg, #6b96ff 0%, #6b96ff var(--w), #34312b var(--w), #34312b 100%);
+      border-color: #4a453c;
+    }
+
+    [data-theme="dark"] .period.transition .bar {
+      background: linear-gradient(90deg, #f05a43 0%, #f05a43 var(--w), #34312b var(--w), #34312b 100%);
+    }
+
+    @media (max-width: 880px) {
+      body {
+        overflow-x: hidden;
+      }
+
+      .shell {
+        width: calc(100vw - 20px);
+        max-width: calc(100vw - 20px);
+        padding-top: 18px;
+        overflow-x: hidden;
+      }
+
+      header,
+      .grid-two,
+      .callout-row {
+        grid-template-columns: 1fr;
+      }
+
+      header > *,
+      .grid-two > *,
+      .controls > * {
+        min-width: 0;
+      }
+
+      .controls {
+        top: 0;
+        align-items: stretch;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      .page-menu {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+      }
+
+      .period {
+        grid-template-columns: 1fr;
+      }
+
+      .axis-row {
+        grid-template-columns: 1fr;
+      }
+
+      .axis-status {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .library-tools,
+      .window-card,
+      .window-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .axis-bar {
+        font-size: 10px;
+      }
+
+      .current-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .quick-item strong {
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .lede,
+      .info-band p,
+      .note li,
+      .section-title p {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+
+      .pill-group,
+      .search {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .pill {
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <div class="eyebrow"><span class="dot"></span> ICT reference table</div>
+        <h1>Trading hours: New York, Polska i zmiana czasu.</h1>
+        <p class="lede">
+          Interaktywna tabela do nauki godzin sesyjnych, killzone, CME FX futures oraz ICT macros.
+          Czas NY traktuj jako czas wykresu / rynku amerykańskiego, a czas PL jako praktyczne przeliczenie dla osoby handlującej z Polski.
+        </p>
+      </div>
+
+      <aside class="quick-panel" aria-label="Ściąga czasu na dziś">
+        <h2>Ściąga na dziś</h2>
+        <div class="day-brief">
+          <span id="briefStatus">Obecnie</span>
+          <strong id="briefRelation">PL = NY + 6h</strong>
+          <p id="briefUtc">NY UTC-4 / PL UTC+2</p>
+        </div>
+        <div class="quick-list">
+          <div class="quick-item"><span>London Open</span><strong id="briefLondonOpen">03:00 NY / 09:00 PL</strong></div>
+          <div class="quick-item"><span>Tokyo Open</span><strong id="briefTokyoOpen">20:00 NY / 02:00 PL</strong></div>
+          <div class="quick-item"><span>NY data</span><strong id="briefNyData">08:30 NY / 14:30 PL</strong></div>
+          <div class="quick-item"><span>US cash open</span><strong id="briefCashOpen">09:30 NY / 15:30 PL</strong></div>
+        </div>
+      </aside>
+    </header>
+
+    <nav class="page-menu" aria-label="Menu strony">
+      <a class="brand-link" href="#">ICT Time Map</a>
+      <a href="#dst-calendar">Zmiana czasu</a>
+      <a href="#session-axis">Oś sesji</a>
+      <a href="#time-library">Biblioteka</a>
+      <button class="theme-nav" id="themeToggle" type="button" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-text">Dark</span></button>
+    </nav>
+
+    <div class="grid-two">
+      <section class="info-band" id="transition-explained">
+        <h2>Czego dotyczy okres przejściowy?</h2>
+        <p>
+          Okres przejściowy dotyczy relacji czasu między USA/NY a Europą, UK i Polską.
+          USA zmienia czas w innym terminie niż Europa. Przez kilka lub kilkanaście dni
+          różnica między Polską a New Yorkiem wynosi 5 godzin zamiast typowych 6 godzin.
+        </p>
+      </section>
+
+      <section class="note">
+        <h2>Jak to czytać?</h2>
+        <ul>
+          <li>Okna liczone według NY zostają w NY bez zmian; zmienia się ich godzina w Polsce.</li>
+          <li>Okna liczone według Londynu/Europy zostają lokalnie bez zmian; na wykresie NY przesuwają się o godzinę później.</li>
+          <li>London Open nie jest na sztywno 03:00 NY. Prawidłowy punkt odniesienia to 08:00 London.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section id="dst-calendar" data-section="moments">
+      <div class="section-title">
+        <div>
+          <h2>Kalendarz zmiany czasu</h2>
+          <p>Daty pokazują, kiedy zmienia się relacja NY ↔ Polska/London. Wybierz rok, żeby zobaczyć dokładne okresy przejściowe dla aktualnych reguł USA i Europy.</p>
+          <div class="year-tools">
+            <span class="control-label">Rok</span>
+            <select class="year-select" id="yearSelect" aria-label="Wybierz rok"></select>
+          </div>
+        </div>
+      </div>
+      <div class="timeline" id="dstTimeline"></div>
+    </section>
+
+    <section id="session-axis" data-section="moments">
+      <div class="section-title">
+        <div>
+          <h2>Interaktywna oś sesji w ciągu dnia</h2>
+          <p>Oś pokazuje rozkład okien na 24-godzinnym wykresie NY. Zmienia się według rynku oraz wybranej daty, więc London i Tokyo przesuwają się tam, gdzie faktycznie powinny.</p>
+        </div>
+      </div>
+      <div class="axis-controls" aria-label="Ustawienia osi czasu">
+        <span class="control-label">Rynek na osi</span>
+        <div class="pill-group" data-filter-group="axis-market">
+          <button class="pill" type="button" data-market="all" aria-pressed="true">Wszystko</button>
+          <button class="pill" type="button" data-market="indices" aria-pressed="false">Indeksy</button>
+          <button class="pill" type="button" data-market="futures" aria-pressed="false">Forex / FX futures</button>
+        </div>
+        <p class="market-note">Ten wybór zmienia tylko interaktywną oś sesji. Biblioteka niżej ma osobny filtr instrumentu.</p>
+      </div>
+      <div class="axis-details" id="axisDetails" aria-hidden="true">
+        <span class="control-label">Szczegóły osi</span>
+        <h3>Najedź na element osi</h3>
+        <p>Tu pojawi się pełna nazwa, rozwinięcie skrótu oraz opis wybranego okna.</p>
+      </div>
+      <div class="axis-status" id="axisStatus" aria-label="Aktualna parametryzacja osi"></div>
+      <div class="time-axis" id="timeAxis"></div>
+    </section>
+
+    <section id="time-library" data-section="moments">
+      <div class="section-title">
+        <div>
+          <h2>Biblioteka okien czasowych</h2>
+          <p>Jedna lista dla sesji, killzone, makr, CME, oficjalnych godzin giełdowych i konceptów czasowych ICT. Wybierz instrument, żeby automatycznie zawęzić listę do najważniejszych okien dla danego rynku.</p>
+        </div>
+      </div>
+      <div class="library-shell">
+        <div class="library-tools">
+          <div>
+            <span class="control-label">Instrument</span>
+            <select id="libraryInstrument" aria-label="Wybierz instrument"></select>
+          </div>
+          <div>
+            <span class="control-label">Czas bazowy</span>
+            <select id="libraryClock" aria-label="Filtr czasu bazowego">
+              <option value="all">Wszystkie zegary</option>
+              <option value="ny">NY time</option>
+              <option value="europe">Europe / London</option>
+              <option value="tokyo">Tokyo / Asia</option>
+              <option value="cme">CME / exchange</option>
+            </select>
+          </div>
+          <div>
+            <span class="control-label">Szukaj w bibliotece</span>
+            <input class="search" id="search" type="search" placeholder="Nasdaq, London, macro, CME, 08:30..." />
+          </div>
+        </div>
+        <div class="library-tabs" id="libraryTabs" aria-label="Typ okna">
+          <button class="pill" type="button" data-library-tab="recommended" aria-pressed="true">Najważniejsze dla instrumentu</button>
+          <button class="pill" type="button" data-library-tab="all" aria-pressed="false">Wszystko</button>
+          <button class="pill" type="button" data-library-tab="sessions" aria-pressed="false">Sesje / killzone</button>
+          <button class="pill" type="button" data-library-tab="ict" aria-pressed="false">ICT koncepty</button>
+          <button class="pill" type="button" data-library-tab="macros" aria-pressed="false">Makra</button>
+          <button class="pill" type="button" data-library-tab="official" aria-pressed="false">Oficjalne giełdy</button>
+          <button class="pill" type="button" data-library-tab="cme" aria-pressed="false">CME</button>
+        </div>
+        <div class="library-summary" id="librarySummary"></div>
+        <div class="window-list" id="timeLibraryResults"></div>
+      </div>
+    </section>
+
+    <section id="key-moments" data-section="moments">
+      <div class="section-title">
+        <div>
+          <h2>Kluczowe momenty</h2>
+          <p>Najważniejsze godziny referencyjne dla Forexu, indeksów, danych USA i sesji europejskiej.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Moment</th>
+              <th>Czas bazowy</th>
+              <th data-period-column="normal">PL normalnie +6h</th>
+              <th data-period-column="transition">PL w przejściu +5h</th>
+              <th>Znaczenie</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-market="all" data-search="midnight open 00:00 ny poziom referencyjny" data-kind="ny">
+              <td><button class="row-button" type="button">Midnight Open</button><div class="detail">Często używany jako punkt odniesienia dla biasu, poziomów dziennych i reakcji ceny po starcie dnia NY.</div></td>
+              <td><span class="tag ny">NY</span> <span class="time">00:00 NY</span></td>
+              <td data-period-cell="normal">06:00 PL</td>
+              <td data-period-cell="transition">05:00 PL</td>
+              <td>Poziom referencyjny dnia NY.</td>
+            </tr>
+            <tr data-market="all" data-search="frankfurt early europe 08:00 pl 02:00 03:00 ny" data-kind="eu">
+              <td><button class="row-button" type="button">Frankfurt / Early Europe</button><div class="detail">W okresie przejściowym nie szukaj tego okna sztywno o 02:00 NY, bo europejski poranek wypada wtedy o 03:00 NY.</div></td>
+              <td><span class="tag eu">Europa</span> <span class="time">08:00 PL</span></td>
+              <td data-period-cell="normal">02:00 NY / 08:00 PL</td>
+              <td data-period-cell="transition">03:00 NY / 08:00 PL</td>
+              <td>Start aktywności europejskiej przed właściwym London Open.</td>
+            </tr>
+            <tr data-market="all" data-search="london open 08:00 london 03:00 04:00 ny 09:00 pl" data-kind="eu">
+              <td><button class="row-button" type="button">London Open</button><div class="detail">Najważniejsza zasada: London Open liczymy od 08:00 London, a nie od stałej godziny na NY chart.</div></td>
+              <td><span class="tag eu">London</span> <span class="time">08:00 London</span></td>
+              <td data-period-cell="normal">03:00 NY / 09:00 PL</td>
+              <td data-period-cell="transition">04:00 NY / 09:00 PL</td>
+              <td>Właściwy start sesji londyńskiej.</td>
+            </tr>
+            <tr data-market="futures" data-search="cme fx futures rth open 08:20 ny" data-kind="cme">
+              <td><button class="row-button" type="button">CME FX futures RTH Open</button><div class="detail">Klasyczny regular hours open dla FX futures, często obserwowany przy 6E, 6B, 6J, 6A, 6C, 6S.</div></td>
+              <td><span class="tag cme">CME</span> <span class="time">08:20 NY</span></td>
+              <td data-period-cell="normal">14:20 PL</td>
+              <td data-period-cell="transition">13:20 PL</td>
+              <td>Pierwsze regularne ruchy futures.</td>
+            </tr>
+            <tr data-market="all" data-search="news embargo lift usa data cpi nfp claims retail sales 08:30 ny" data-kind="ny">
+              <td><button class="row-button" type="button">USA Data / News Embargo</button><div class="detail">Typowa godzina publikacji najważniejszych danych: CPI, NFP, Claims, Retail Sales i podobne wydarzenia high impact.</div></td>
+              <td><span class="tag ny">NY</span> <span class="time">08:30 NY</span></td>
+              <td data-period-cell="normal">14:30 PL</td>
+              <td data-period-cell="transition">13:30 PL</td>
+              <td>Potencjalny spike, sweep, repricing.</td>
+            </tr>
+            <tr data-market="indices" data-search="us equities cash open true day start 09:30 ny" data-kind="ny">
+              <td><button class="row-button" type="button">US Equities Cash Open</button><div class="detail">To nie jest Forex open, ale często wpływa na USD flows, DXY, yields, ES/NQ/Dow, VIX oraz risk-on/risk-off.</div></td>
+              <td><span class="tag ny">NY</span> <span class="time">09:30 NY</span></td>
+              <td data-period-cell="normal">15:30 PL</td>
+              <td data-period-cell="transition">14:30 PL</td>
+              <td>True Day Start dla akcji USA.</td>
+            </tr>
+            <tr data-market="all" data-search="usa data second wave 10:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">USA Data / Druga fala</button><div class="detail">Częsta godzina kolejnych danych lub kontynuacji/reversalu po pierwszym impulsie z 08:30 i 09:30 NY.</div></td>
+              <td><span class="tag ny">NY</span> <span class="time">10:00 NY</span></td>
+              <td data-period-cell="normal">16:00 PL</td>
+              <td data-period-cell="transition">15:00 PL</td>
+              <td>Druga fala zmienności w NY AM.</td>
+            </tr>
+            <tr data-market="all" data-search="ny slowdown 11:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">NY Late Morning</button><div class="detail">Po głównym impulsie porannym często widać wyciszenie, realizację części ruchu albo przejście w konsolidację.</div></td>
+              <td><span class="tag ny">NY</span> <span class="time">11:00 NY</span></td>
+              <td data-period-cell="normal">17:00 PL</td>
+              <td data-period-cell="transition">16:00 PL</td>
+              <td>Częste wyciszenie po porannej zmienności.</td>
+            </tr>
+            <tr data-market="all" data-search="london fix 16:00 london 17:00 pl 11:00 12:00 ny" data-kind="eu">
+              <td><button class="row-button" type="button">London Fix</button><div class="detail">To wydarzenie liczymy według czasu londyńskiego. Lokalnie pozostaje 16:00 London, a w Polsce najczęściej 17:00. Na NY chart w przejściu wypada o godzinę później.</div></td>
+              <td><span class="tag eu">London</span> <span class="time">16:00 London</span></td>
+              <td data-period-cell="normal">11:00 NY / 17:00 PL</td>
+              <td data-period-cell="transition">12:00 NY / 17:00 PL</td>
+              <td>Fixing, przepływy i możliwy impuls przy końcu Londynu.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="asia-tokyo" data-section="sessions" data-market="futures">
+      <div class="section-title">
+        <div>
+          <h2>Azja / Tokyo</h2>
+          <p>Tokyo nie zmienia czasu. Dlatego azjatyckie okna liczone według lokalnej Azji przesuwają się względem wykresu NY inaczej niż London.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>Czas bazowy</th>
+              <th>NY, gdy USA ma czas zimowy</th>
+              <th>NY, gdy USA ma czas letni</th>
+              <th>Polska, gdy PL ma czas zimowy</th>
+              <th>Polska, gdy PL ma czas letni</th>
+              <th>Wniosek</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-market="futures" data-search="tokyo open asian killzone 09:00 jst 19:00 20:00 ny" data-kind="asia">
+              <td><button class="row-button" type="button">Tokyo Open / start Azji</button><div class="detail">Jeżeli punkt odniesienia to Tokyo 09:00 JST, na wykresie NY będzie to 19:00 albo 20:00 zależnie od czasu w USA.</div></td>
+              <td><span class="tag asia">Tokyo</span> <span class="time">09:00 JST</span></td>
+              <td>19:00 NY poprzedniego dnia</td>
+              <td>20:00 NY poprzedniego dnia</td>
+              <td>01:00 PL</td>
+              <td>02:00 PL</td>
+              <td>Start Azji może wyglądać jak 19:00 NY zimą USA albo 20:00 NY latem USA.</td>
+            </tr>
+            <tr data-market="futures" data-search="asian killzone tokyo local 09:00 13:00 jst 19:00 23:00 20:00 00:00 ny" data-kind="asia">
+              <td><button class="row-button" type="button">Asian Killzone - wersja Tokyo</button><div class="detail">Przykład okna liczonego lokalnie od Tokyo 09:00 do 13:00 JST. To nie jest to samo co sztywne 20:00-00:00 NY przez cały rok.</div></td>
+              <td><span class="tag asia">Tokyo</span> <span class="time">09:00-13:00 JST</span></td>
+              <td>19:00-23:00 NY</td>
+              <td>20:00-00:00 NY</td>
+              <td>01:00-05:00 PL</td>
+              <td>02:00-06:00 PL</td>
+              <td>Jeżeli uczysz się z materiału opartego o Tokyo, patrz na czas Tokyo/JST, nie tylko na sztywny NY time.</td>
+            </tr>
+            <tr data-market="futures" data-search="asian killzone fixed ny 20:00 00:00 ny" data-kind="asia">
+              <td><button class="row-button" type="button">Asian Killzone - wersja stała NY</button><div class="detail">Niektóre materiały ICT podają Azję jako stałe okno na wykresie NY. Wtedy nie przesuwasz godziny NY, tylko przeliczasz ją na Polskę.</div></td>
+              <td><span class="tag ny">NY</span> <span class="time">20:00-00:00 NY</span></td>
+              <td>20:00-00:00 NY</td>
+              <td>20:00-00:00 NY</td>
+              <td>02:00-06:00 PL przy relacji +6h</td>
+              <td>01:00-05:00 PL przy relacji +5h</td>
+              <td>To jest wersja oparta o NY chart, a nie o lokalny start Tokyo.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="sessions" data-section="sessions">
+      <div class="section-title">
+        <div>
+          <h2>Sesje i killzone</h2>
+          <p>Okna używane w nauce ICT. Dla okien europejskich zwracaj uwagę, czy analizujesz lokalny czas Europy/Londynu, czy wykres ustawiony pod New York.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Okno</th>
+              <th>Czas bazowy</th>
+              <th>Czas NY</th>
+              <th data-period-column="normal">PL normalnie +6h</th>
+              <th data-period-column="transition">PL w przejściu +5h</th>
+              <th>Uwagi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-market="indices" data-search="london open killzone indeksy indices 02:00 05:00 ny" data-kind="eu">
+              <td><button class="row-button" type="button">London Open Killzone - Indeksy</button><div class="detail">Wersja dla indeksów z układu ICT. W okresie przejściowym europejski poranek jest godzinę później na NY chart.</div></td>
+              <td><span class="tag eu">Europa/London</span></td>
+              <td>Normalnie 02:00-05:00 NY; w przejściu dla czasu europejskiego patrz 03:00-06:00 NY</td>
+              <td data-period-cell="normal">08:00-11:00 PL</td>
+              <td data-period-cell="transition">08:00-11:00 PL przy czasie Europe; 07:00-10:00 PL przy sztywnym NY</td>
+              <td>To okno nie jest tym samym co szerzej używany London Open KZ dla Forexu.</td>
+            </tr>
+            <tr data-market="futures" data-search="london open killzone forex futures 01:00 05:00 ny" data-kind="eu">
+              <td><button class="row-button" type="button">London Open Killzone - Forex / FX</button><div class="detail">Szerokie okno europejskiej zmienności. Gdy używasz wersji opartej o Londyn, korekta przejściowa jest kluczowa.</div></td>
+              <td><span class="tag eu">Europa/London</span></td>
+              <td>Normalnie 01:00-05:00 NY; w przejściu dla czasu londyńskiego patrz 02:00-06:00 NY</td>
+              <td data-period-cell="normal">07:00-11:00 PL</td>
+              <td data-period-cell="transition">07:00-11:00 PL przy czasie London; 06:00-10:00 PL przy sztywnym NY</td>
+              <td>Najpierw ustal, czy Twoja metodyka liczy okno od NY chart czy od lokalnego Londynu.</td>
+            </tr>
+            <tr data-market="all" data-search="am silver bullet 03:00 04:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">AM Silver Bullet</button><div class="detail">Jednogodzinne okno poranne. Jeśli interpretujesz je wokół London Open, pamiętaj, że sam London Open w przejściu wypada o 04:00 NY.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td>03:00-04:00 NY</td>
+              <td data-period-cell="normal">09:00-10:00 PL</td>
+              <td data-period-cell="transition">08:00-09:00 PL</td>
+              <td>Stałe okno NY; kontekst London wymaga korekty przejściowej.</td>
+            </tr>
+            <tr data-market="indices" data-search="ny premarket indeksy indices 07:00 09:30 ny" data-kind="ny">
+              <td><button class="row-button" type="button">NY Premarket - Indeksy</button><div class="detail">Okno przed cash open akcji USA. Przy indeksach często prowadzi do setupu pod 09:30 NY.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td>07:00-09:30 NY</td>
+              <td data-period-cell="normal">13:00-15:30 PL</td>
+              <td data-period-cell="transition">12:00-14:30 PL</td>
+              <td>Okno indeksowe przed True Day Start.</td>
+            </tr>
+            <tr data-market="indices" data-search="ny am session indeksy indices 08:30 11:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">NY AM Session - Indeksy</button><div class="detail">Główne poranne okno indeksów: dane 08:30, cash open 09:30 i często druga fala około 10:00 NY.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td>08:30-11:00 NY</td>
+              <td data-period-cell="normal">14:30-17:00 PL</td>
+              <td data-period-cell="transition">13:30-16:00 PL</td>
+              <td>Najważniejsze indeksowe okno AM.</td>
+            </tr>
+            <tr data-market="futures" data-search="new york open killzone forex futures 07:00 10:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">New York Open Killzone - Forex / FX</button><div class="detail">Główne okno poranne NY przed i wokół cash open, szczególnie ważne przy danych 08:30 i otwarciu akcji 09:30.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td>07:00-10:00 NY</td>
+              <td data-period-cell="normal">13:00-16:00 PL</td>
+              <td data-period-cell="transition">12:00-15:00 PL</td>
+              <td>Okno liczone według New York.</td>
+            </tr>
+            <tr data-market="futures" data-search="london close killzone forex futures 10:00 12:00 ny 16:00 18:00 pl" data-kind="eu">
+              <td><button class="row-button" type="button">London Close Killzone</button><div class="detail">Jeśli głównym punktem odniesienia jest zamykanie Londynu/fix, w przejściu patrz na lokalny London time i przelicz NY ostrożnie.</div></td>
+              <td><span class="tag eu">London/NY</span></td>
+              <td>10:00-12:00 NY</td>
+              <td data-period-cell="normal">16:00-18:00 PL</td>
+              <td data-period-cell="transition">15:00-17:00 PL przy sztywnym NY; fix pozostaje około 17:00 PL</td>
+              <td>London Fix lokalnie nie znika; przesuwa się względem NY chart.</td>
+            </tr>
+            <tr data-market="all" data-search="ny silver bullet 10:00 11:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">NY Silver Bullet</button><div class="detail">Okno po cash open, często po pierwszym impulsie NY i wokół danych / drugiej fali o 10:00 NY.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td>10:00-11:00 NY</td>
+              <td data-period-cell="normal">16:00-17:00 PL</td>
+              <td data-period-cell="transition">15:00-16:00 PL</td>
+              <td>Stałe okno NY.</td>
+            </tr>
+            <tr data-market="all" data-search="ny pm session 13:00 16:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">NY PM Session</button><div class="detail">Popołudniowe okno NY, często istotne przy kontynuacji, retracement albo zmianie charakteru dnia.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td>13:00-16:00 NY</td>
+              <td data-period-cell="normal">19:00-22:00 PL</td>
+              <td data-period-cell="transition">18:00-21:00 PL</td>
+              <td>Stałe okno NY.</td>
+            </tr>
+            <tr data-market="all" data-search="pm silver bullet 14:00 15:00 ny" data-kind="ny">
+              <td><button class="row-button" type="button">PM Silver Bullet</button><div class="detail">Jednogodzinne okno popołudniowe, używane jako osobny segment sesji PM.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td>14:00-15:00 NY</td>
+              <td data-period-cell="normal">20:00-21:00 PL</td>
+              <td data-period-cell="transition">19:00-20:00 PL</td>
+              <td>Stałe okno NY.</td>
+            </tr>
+            <tr data-market="futures" data-search="asian session killzone forex futures 20:00 00:00 ny asia" data-kind="ny">
+              <td><button class="row-button" type="button">Asian Session Killzone</button><div class="detail">Okno przechodzi przez zmianę daty w Polsce, dlatego łatwo pomylić dzień kalendarzowy.</div></td>
+              <td><span class="tag asia">Asia/NY</span></td>
+              <td>20:00-00:00 NY</td>
+              <td data-period-cell="normal">02:00-06:00 PL</td>
+              <td data-period-cell="transition">01:00-05:00 PL</td>
+              <td>W Polsce jest to już następny dzień kalendarzowy.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="advanced-concepts" data-section="sessions">
+      <div class="section-title">
+        <div>
+          <h2>Dodatkowe koncepty czasowe</h2>
+          <p>Elementy uzupełniające dodane z pliku XLSX. Nie zmieniają bazowych killzone ani trzech Silver Bulletów.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Koncept</th>
+              <th>Rynek</th>
+              <th>Czas NY</th>
+              <th>PL normalnie +6h</th>
+              <th>PL w przejściu +5h</th>
+              <th>Uwagi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-market="futures" data-search="ny cut fx options expiry 10:00 forex">
+              <td><button class="row-button" type="button">NY Cut / FX Options Expiry</button><div class="detail">Codzienny moment wygasania opcji walutowych OTC. Traktować jako katalizator FX, nie jako osobną sesję.</div></td>
+              <td><span class="tag macro">Forex</span></td>
+              <td class="time">10:00 NY</td>
+              <td>16:00 PL</td>
+              <td>15:00 PL</td>
+              <td>Może wzmacniać macro 09:50-10:10 i NY Silver Bullet.</td>
+            </tr>
+            <tr data-market="futures" data-search="cbdr start central bank dealers range 14:00 forex">
+              <td><button class="row-button" type="button">CBDR Start</button><div class="detail">Początek Central Bank Dealers Range. To koncept walutowy, więc nie przenosimy go na indeksy.</div></td>
+              <td><span class="tag asia">Forex</span></td>
+              <td class="time">14:00 NY</td>
+              <td>20:00 PL</td>
+              <td>19:00 PL</td>
+              <td>Start zakresu 14:00-20:00 NY.</td>
+            </tr>
+            <tr data-market="futures" data-search="cbdr end central bank dealers range 20:00 forex">
+              <td><button class="row-button" type="button">CBDR End</button><div class="detail">Koniec zakresu CBDR. High/Low tego zakresu bywa referencją dla późniejszego Flout.</div></td>
+              <td><span class="tag asia">Forex</span></td>
+              <td class="time">20:00 NY</td>
+              <td>02:00 PL</td>
+              <td>01:00 PL</td>
+              <td>Moment przejścia do post-CBDR / Flout.</td>
+            </tr>
+            <tr data-market="futures" data-search="flout post cbdr 20:00 00:00 forex">
+              <td><button class="row-button" type="button">Flout / Post-CBDR</button><div class="detail">Ruch po zakończeniu CBDR. Używany jako kontekst dla Azji i kolejnego dnia.</div></td>
+              <td><span class="tag asia">Forex</span></td>
+              <td class="time">20:00-00:00 NY</td>
+              <td>02:00-06:00 PL</td>
+              <td>01:00-05:00 PL</td>
+              <td>Dotyczy FX; nie traktować jako indeksowego open.</td>
+            </tr>
+            <tr data-market="all" data-search="ny lunch lunch hour 12:00 13:30">
+              <td><button class="row-button" type="button">NY Lunch</button><div class="detail">Okno spadku aktywności instytucjonalnej. Zwykle gorsze warunki dla świeżych pozycji.</div></td>
+              <td><span class="tag ny">NY</span></td>
+              <td class="time">12:00-13:30 NY</td>
+              <td>18:00-19:30 PL</td>
+              <td>17:00-18:30 PL</td>
+              <td>Pauza między NY AM i PM.</td>
+            </tr>
+            <tr data-market="indices" data-search="indices open range 09:30 10:30 ny">
+              <td><button class="row-button" type="button">Indices Open Range</button><div class="detail">Pierwsza godzina cash session. Użyteczne szczególnie dla ES/NQ/YM/RTY.</div></td>
+              <td><span class="tag ny">Indeksy</span></td>
+              <td class="time">09:30-10:30 NY</td>
+              <td>15:30-16:30 PL</td>
+              <td>14:30-15:30 PL</td>
+              <td>Nie mylić z Forex open.</td>
+            </tr>
+            <tr data-market="indices" data-search="pm open 13:30 ny indices">
+              <td><button class="row-button" type="button">PM Open</button><div class="detail">Powrót aktywności po lunchu. Często decyzja, czy PM będzie kontynuacją czy reversalem.</div></td>
+              <td><span class="tag ny">Indeksy</span></td>
+              <td class="time">13:30 NY</td>
+              <td>19:30 PL</td>
+              <td>18:30 PL</td>
+              <td>Uzupełnia NY PM Session.</td>
+            </tr>
+            <tr data-market="all" data-search="bond closing hour 15:00 16:00 ny bonds gold indices usd">
+              <td><button class="row-button" type="button">Bond Closing Hour</button><div class="detail">Zamknięcie sesji futures na obligacje USA. Może generować hedging flow w indeksach, USD i złocie.</div></td>
+              <td><span class="tag cme">Bonds</span></td>
+              <td class="time">15:00-16:00 NY</td>
+              <td>21:00-22:00 PL</td>
+              <td>20:00-21:00 PL</td>
+              <td>Kontekst finalnej części dnia, nie Silver Bullet.</td>
+            </tr>
+            <tr data-market="indices" data-search="nyse cash close 16:00 ny close equities">
+              <td><button class="row-button" type="button">NYSE Cash Close</button><div class="detail">Zamknięcie sesji gotówkowej akcji USA. Po nim futures dalej handlują, ale płynność i charakter rynku są inne.</div></td>
+              <td><span class="tag ny">Indeksy</span></td>
+              <td class="time">16:00 NY</td>
+              <td>22:00 PL</td>
+              <td>21:00 PL</td>
+              <td>Ważne dla końcówki dnia indeksów USA.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="macros" data-section="macros">
+      <div class="section-title">
+        <div>
+          <h2>ICT Macros - New York Time</h2>
+          <p>Makra zapisane w czasie NY. W Polsce przesuwają się zależnie od relacji +6h lub +5h.</p>
+        </div>
+      </div>
+      <div class="callout-row">
+        <div class="callout"><span class="label">AM macros</span><strong>5 okien</strong></div>
+        <div class="callout"><span class="label">PM macros</span><strong>5 okien</strong></div>
+        <div class="callout"><span class="label">Czas bazowy</span><strong>NY time</strong></div>
+        <div class="callout"><span class="label">Przeliczenie PL</span><strong>+6h / +5h</strong></div>
+      </div>
+      <div class="table-wrap" style="margin-top: 14px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Macro</th>
+              <th>Segment</th>
+              <th>Czas NY</th>
+              <th data-period-column="normal">PL normalnie +6h</th>
+              <th data-period-column="transition">PL w przejściu +5h</th>
+              <th>Notatka</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-search="macro 07:50 08:10 am ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 07:50-08:10</button><div class="detail">Pierwsze poranne macro przed głównymi danymi 08:30 NY.</div></td>
+              <td><span class="tag macro">AM</span></td>
+              <td class="time">07:50-08:10 NY</td>
+              <td data-period-cell="normal">13:50-14:10 PL</td>
+              <td data-period-cell="transition">12:50-13:10 PL</td>
+              <td>Przed 08:30 NY.</td>
+            </tr>
+            <tr data-search="macro 08:50 09:10 am ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 08:50-09:10</button><div class="detail">Okno po publikacjach 08:30 NY, przed cash open akcji USA.</div></td>
+              <td><span class="tag macro">AM</span></td>
+              <td class="time">08:50-09:10 NY</td>
+              <td data-period-cell="normal">14:50-15:10 PL</td>
+              <td data-period-cell="transition">13:50-14:10 PL</td>
+              <td>Po danych 08:30 NY.</td>
+            </tr>
+            <tr data-search="macro 09:50 10:10 am ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 09:50-10:10</button><div class="detail">Okno wokół 10:00 NY, często po pierwszej reakcji cash open.</div></td>
+              <td><span class="tag macro">AM</span></td>
+              <td class="time">09:50-10:10 NY</td>
+              <td data-period-cell="normal">15:50-16:10 PL</td>
+              <td data-period-cell="transition">14:50-15:10 PL</td>
+              <td>Wokół 10:00 NY.</td>
+            </tr>
+            <tr data-search="macro 10:50 11:10 am ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 10:50-11:10</button><div class="detail">Okno przy przejściu NY AM w późniejszą część poranka.</div></td>
+              <td><span class="tag macro">AM</span></td>
+              <td class="time">10:50-11:10 NY</td>
+              <td data-period-cell="normal">16:50-17:10 PL</td>
+              <td data-period-cell="transition">15:50-16:10 PL</td>
+              <td>Okolice wyciszenia po głównym impulsie AM.</td>
+            </tr>
+            <tr data-search="macro 11:50 12:10 am ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 11:50-12:10</button><div class="detail">Okno przejścia w środek dnia NY.</div></td>
+              <td><span class="tag macro">AM</span></td>
+              <td class="time">11:50-12:10 NY</td>
+              <td data-period-cell="normal">17:50-18:10 PL</td>
+              <td data-period-cell="transition">16:50-17:10 PL</td>
+              <td>Przejście AM → midday.</td>
+            </tr>
+            <tr data-search="macro 12:50 13:10 pm ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 12:50-13:10</button><div class="detail">Pierwsze popołudniowe macro, wejście w PM session.</div></td>
+              <td><span class="tag macro">PM</span></td>
+              <td class="time">12:50-13:10 NY</td>
+              <td data-period-cell="normal">18:50-19:10 PL</td>
+              <td data-period-cell="transition">17:50-18:10 PL</td>
+              <td>Start części PM.</td>
+            </tr>
+            <tr data-search="macro 13:20 13:40 pm ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 13:20-13:40</button><div class="detail">Krótkie okno po rozpoczęciu PM session.</div></td>
+              <td><span class="tag macro">PM</span></td>
+              <td class="time">13:20-13:40 NY</td>
+              <td data-period-cell="normal">19:20-19:40 PL</td>
+              <td data-period-cell="transition">18:20-18:40 PL</td>
+              <td>PM continuation / repricing context.</td>
+            </tr>
+            <tr data-search="macro 14:50 15:10 pm ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 14:50-15:10</button><div class="detail">Okno wokół 15:00 NY, po PM Silver Bullet.</div></td>
+              <td><span class="tag macro">PM</span></td>
+              <td class="time">14:50-15:10 NY</td>
+              <td data-period-cell="normal">20:50-21:10 PL</td>
+              <td data-period-cell="transition">19:50-20:10 PL</td>
+              <td>Końcówka istotnej części popołudnia.</td>
+            </tr>
+            <tr data-search="macro 15:15 15:45 pm ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 15:15-15:45</button><div class="detail">Okno blisko końcówki cash session i przed 16:00 NY.</div></td>
+              <td><span class="tag macro">PM</span></td>
+              <td class="time">15:15-15:45 NY</td>
+              <td data-period-cell="normal">21:15-21:45 PL</td>
+              <td data-period-cell="transition">20:15-20:45 PL</td>
+              <td>Late PM context.</td>
+            </tr>
+            <tr data-search="macro 15:50 16:10 pm ny" data-kind="macro">
+              <td><button class="row-button" type="button">Macro 15:50-16:10</button><div class="detail">Okno wokół 16:00 NY, czyli końcówki regularnej sesji dla wielu instrumentów.</div></td>
+              <td><span class="tag macro">PM</span></td>
+              <td class="time">15:50-16:10 NY</td>
+              <td data-period-cell="normal">21:50-22:10 PL</td>
+              <td data-period-cell="transition">20:50-21:10 PL</td>
+              <td>Close / late-day repricing.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="cme" data-section="cme" data-market="futures">
+      <div class="section-title">
+        <div>
+          <h2>CME FX Futures</h2>
+          <p>Godziny futures FX są liczone według czasu giełdowego USA. Poniżej praktyczne przeliczenie NY, Chicago i Polski.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>NY time</th>
+              <th>Chicago / CT</th>
+              <th data-period-column="normal">PL normalnie +6h</th>
+              <th data-period-column="transition">PL w przejściu +5h</th>
+              <th>Opis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-search="weekly globex open sunday 18:00 ny monday pl" data-kind="cme">
+              <td><button class="row-button" type="button">Weekly Globex Open</button><div class="detail">Start nowego tygodnia dla kontraktów CME FX futures.</div></td>
+              <td class="time">Sunday 18:00 NY</td>
+              <td>Sunday 17:00 CT</td>
+              <td data-period-cell="normal">Monday 00:00 PL</td>
+              <td data-period-cell="transition">Sunday 23:00 PL</td>
+              <td>Otwarcie tygodnia.</td>
+            </tr>
+            <tr data-search="daily technical break cme 17:00 18:00 ny" data-kind="cme">
+              <td><button class="row-button" type="button">Daily Technical Break</button><div class="detail">Codzienna przerwa techniczna futures. Po niej startuje nowy dzień futures.</div></td>
+              <td class="time">17:00-18:00 NY</td>
+              <td>16:00-17:00 CT</td>
+              <td data-period-cell="normal">23:00-00:00 PL</td>
+              <td data-period-cell="transition">22:00-23:00 PL</td>
+              <td>Przerwa techniczna.</td>
+            </tr>
+            <tr data-search="globex reopen 18:00 ny" data-kind="cme">
+              <td><button class="row-button" type="button">Globex Daily Reopen</button><div class="detail">Re-open po przerwie technicznej i start nowego dnia futures.</div></td>
+              <td class="time">18:00 NY</td>
+              <td>17:00 CT</td>
+              <td data-period-cell="normal">00:00 PL</td>
+              <td data-period-cell="transition">23:00 PL</td>
+              <td>Start nowego dnia futures.</td>
+            </tr>
+            <tr data-search="fx futures rth open 08:20 ny" data-kind="cme">
+              <td><button class="row-button" type="button">FX Futures RTH Open</button><div class="detail">Regular hours open dla FX futures, często traktowany jako osobny punkt startowy ruchu.</div></td>
+              <td class="time">08:20 NY</td>
+              <td>07:20 CT</td>
+              <td data-period-cell="normal">14:20 PL</td>
+              <td data-period-cell="transition">13:20 PL</td>
+              <td>RTH open.</td>
+            </tr>
+            <tr data-search="fx futures rth close 15:00 ny" data-kind="cme">
+              <td><button class="row-button" type="button">FX Futures RTH Close</button><div class="detail">Regular hours close dla FX futures.</div></td>
+              <td class="time">15:00 NY</td>
+              <td>14:00 CT</td>
+              <td data-period-cell="normal">21:00 PL</td>
+              <td data-period-cell="transition">20:00 PL</td>
+              <td>RTH close.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="instrument-library" data-section="moments">
+      <div class="section-title">
+        <div>
+          <h2>Instrumenty i właściwy zegar</h2>
+          <p>Najbezpieczniej przypisać instrument do rynku i lokalnego czasu giełdy, zamiast wrzucać wszystko do jednego schematu NY.</p>
+        </div>
+      </div>
+      <div class="instrument-tool">
+        <div>
+          <span class="control-label">Wyszukiwarka instrumentu</span>
+          <input class="instrument-input" id="instrumentSearch" type="search" placeholder="Wpisz np. EURUSD, NQ, ES, GER40, DAX, XAUUSD, CL, WTI..." />
+        </div>
+        <div class="instrument-results" id="instrumentResults"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Grupa instrumentów</th>
+              <th>Przykłady</th>
+              <th>Czas bazowy</th>
+              <th>Najważniejsze okna</th>
+              <th>Uwaga praktyczna</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-market="indices" data-search="us indices futures es nq ym rty sp500 nasdaq dow russell">
+              <td><button class="row-button" type="button">US index futures</button><div class="detail">Kontrakty indeksowe USA działają praktycznie prawie całą dobę, ale główna zmienność ICT zwykle skupia się wokół danych USA, cash open i PM session.</div></td>
+              <td>ES, NQ, YM, RTY, MES, MNQ</td>
+              <td>NY / Chicago CME</td>
+              <td>08:30, 09:30, 10:00, 13:00-16:00 NY</td>
+              <td>Cash open 09:30 NY jest kluczowy dla indeksów, nawet jeśli futures handlują wcześniej.</td>
+            </tr>
+            <tr data-market="indices" data-search="us cash equities stocks spy qqq dia iwm nyse nasdaq">
+              <td><button class="row-button" type="button">US cash equities / ETF</button><div class="detail">Akcje i ETF-y USA są najmocniej związane z regularną sesją giełdową, więc 09:30 NY jest właściwym punktem odniesienia.</div></td>
+              <td>SPY, QQQ, DIA, IWM, akcje NYSE/Nasdaq</td>
+              <td>NY cash session</td>
+              <td>09:30-16:00 NY</td>
+              <td>To nie jest Forex open; to otwarcie rynku akcji USA.</td>
+            </tr>
+            <tr data-market="futures" data-search="fx futures 6e 6b 6j 6a 6c 6s cme">
+              <td><button class="row-button" type="button">CME FX futures</button><div class="detail">FX futures mają własne godziny CME, ale wiele reakcji i tak układa się wokół danych USA oraz sesji London/NY.</div></td>
+              <td>6E, 6B, 6J, 6A, 6C, 6S</td>
+              <td>NY / Chicago CME</td>
+              <td>08:20 RTH, 08:30 data, 17:00-18:00 break</td>
+              <td>Warto odróżnić RTH open 08:20 NY od danych 08:30 NY.</td>
+            </tr>
+            <tr data-market="futures" data-search="spot forex eurusd gbpusd usdjpy audusd usdcad usdchf">
+              <td><button class="row-button" type="button">Spot Forex</button><div class="detail">Spot FX nie ma jednego centralnego otwarcia giełdy, więc sesje London/NY/Asia są mapą płynności, a nie jednym oficjalnym dzwonkiem.</div></td>
+              <td>EURUSD, GBPUSD, USDJPY, AUDUSD, USDCAD, USDCHF</td>
+              <td>London / NY / Tokyo</td>
+              <td>London Open, NY Open, Asian/Tokyo</td>
+              <td>Dla London trzymaj się 08:00 London; dla Tokyo pamiętaj, że Japonia nie zmienia czasu.</td>
+            </tr>
+            <tr data-market="indices" data-search="european indices dax ger40 fdax ftse cac eurostoxx">
+              <td><button class="row-button" type="button">Europejskie indeksy</button><div class="detail">Tu nie wolno mechanicznie przenosić logiki 09:30 NY. DAX/GER40 jest rynkiem europejskim, więc najpierw patrz na lokalny czas Frankfurt/Europe i specyfikację instrumentu.</div></td>
+              <td>DAX / GER40, FDAX, EuroStoxx, CAC40, FTSE</td>
+              <td>Frankfurt / London / Europe local</td>
+              <td>Europe open, London, local cash open, London Fix</td>
+              <td>CFD GER40 może mieć inne godziny u brokera niż cash DAX lub futures FDAX. Traktuj nazwę instrumentu i feed jako część analizy.</td>
+            </tr>
+            <tr data-market="all" data-search="metals energy gold oil gc cl commodities">
+              <td><button class="row-button" type="button">Towary i metale</button><div class="detail">Metale i energia często reagują na USD, yields, dane USA i godziny giełdowe futures, ale ich specyfikacja sesji zależy od konkretnego kontraktu.</div></td>
+              <td>GC, SI, CL, NG, XAUUSD</td>
+              <td>CME/NY albo feed brokera</td>
+              <td>Dane USA, NY AM, settlement / close</td>
+              <td>Do precyzyjnych godzin zawsze sprawdzaj kontrakt lub specyfikację brokera.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="foot">
+      Uwaga praktyczna: święta giełdowe, skrócone sesje, roll kontraktów oraz broker feed mogą zmieniać dostępność handlu lub wygląd danych.
+      Ta tabela służy jako edukacyjna mapa czasu dla koncepcji ICT, a nie jako kalendarz wyjątków giełdowych.
+    </p>
+  </main>
+
+  <script>
+    const sectionButtons = document.querySelectorAll('[data-filter]');
+    const marketButtons = document.querySelectorAll('button[data-market]');
+    const sections = document.querySelectorAll('[data-section]');
+    const search = document.querySelector('#search');
+    const yearSelect = document.querySelector('#yearSelect');
+    const dstTimeline = document.querySelector('#dstTimeline');
+    const timeAxis = document.querySelector('#timeAxis');
+    const themeToggle = document.querySelector('#themeToggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    const themeText = themeToggle.querySelector('.theme-text');
+    const instrumentSearch = document.querySelector('#instrumentSearch');
+    const instrumentResults = document.querySelector('#instrumentResults');
+    const libraryInstrument = document.querySelector('#libraryInstrument');
+    const libraryClock = document.querySelector('#libraryClock');
+    const librarySummary = document.querySelector('#librarySummary');
+    const timeLibraryResults = document.querySelector('#timeLibraryResults');
+    const libraryTabButtons = document.querySelectorAll('[data-library-tab]');
+    const axisDetails = document.querySelector('#axisDetails');
+    const axisStatus = document.querySelector('#axisStatus');
+    const briefStatus = document.querySelector('#briefStatus');
+    const briefRelation = document.querySelector('#briefRelation');
+    const briefUtc = document.querySelector('#briefUtc');
+    const briefLondonOpen = document.querySelector('#briefLondonOpen');
+    const briefTokyoOpen = document.querySelector('#briefTokyoOpen');
+    const briefNyData = document.querySelector('#briefNyData');
+    const briefCashOpen = document.querySelector('#briefCashOpen');
+
+    let activeSection = 'all';
+    let activeMarket = 'all';
+    let activeLibraryTab = 'recommended';
+    let activeLibraryInstrument = 'all';
+    let activeLibraryClock = 'all';
+    let selectedDate = new Date();
+    let selectedYear = selectedDate.getFullYear();
+
+    const months = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+
+    const instruments = [
+      { market: 'futures', tag: 'Forex', name: 'EURUSD', aliases: 'eurusd euro dollar 6e', basis: 'London / NY / CME FX', windows: 'London Open, 08:20 CME FX, 08:30 data, NY Open', dst: 'London przesuwa się w przejściu; NY data zostają w NY.', note: 'Dla spot FX nie ma jednego centralnego open. Dla 6E patrz też CME FX futures.' },
+      { market: 'futures', tag: 'Forex', name: 'GBPUSD', aliases: 'gbpusd cable 6b', basis: 'London / NY / CME FX', windows: 'London Open, London Fix, 08:30 data, NY AM', dst: 'Najważniejsza korekta to London 08:00 = 04:00 NY w marcowym/jesiennym przejściu.', note: 'Silnie związany z Londynem, więc nie trzymaj London Open sztywno jako 03:00 NY.' },
+      { market: 'futures', tag: 'Forex', name: 'USDJPY', aliases: 'usdjpy yen 6j tokyo asia', basis: 'Tokyo / NY / CME FX', windows: 'Tokyo Open, Asia, 08:30 data, NY AM', dst: 'Tokyo nie zmienia czasu: 09:00 JST = 19:00 NY zimą USA albo 20:00 NY latem USA.', note: 'Przy JPY dodaj logikę Tokyo, nie tylko London/NY.' },
+      { market: 'futures', tag: 'Forex', name: 'AUDUSD', aliases: 'audusd aussie 6a asia sydney', basis: 'Asia / NY / CME FX', windows: 'Asia, London, 08:30 data, NY AM', dst: 'Azja i Australia wymagają sprawdzenia lokalnego czasu/fedu, NY nie wystarcza.', note: 'Dobre do obserwacji nocnej płynności i przejścia Asia → London.' },
+      { market: 'futures', tag: 'Forex', name: 'USDCAD', aliases: 'usdcad cad 6c oil canada', basis: 'NY / CME FX', windows: '08:30 data, NY Open, oil context', dst: 'NY godziny zostają stałe; w Polsce +6h albo +5h.', note: 'Często reaguje na dane USA/Kanady i ropę.' },
+      { market: 'futures', tag: 'Forex', name: 'USDCHF', aliases: 'usdchf swiss 6s', basis: 'London / NY / CME FX', windows: 'London, NY data, NY AM', dst: 'London local przesuwa się względem NY w przejściu.', note: 'Traktuj podobnie jak major FX z silnym komponentem europejskim.' },
+      { market: 'indices', tag: 'US Index', name: 'ES / SPX / SPY', aliases: 'es spx spy sp500 s&p 500 mes', basis: 'NY cash / CME', windows: '08:30 data, 09:30 cash open, 10:00, PM session', dst: 'Okna NY są stałe; w Polsce +6h albo +5h.', note: 'Cash open 09:30 NY jest głównym punktem dla indeksów USA.' },
+      { market: 'indices', tag: 'US Index', name: 'NQ / Nasdaq / QQQ', aliases: 'nq nasdaq qqq mnq', basis: 'NY cash / CME', windows: '08:30 data, 09:30 cash open, 10:00, PM session', dst: 'Okna NY są stałe; w Polsce +6h albo +5h.', note: 'Najczęściej duża reakcja przy tech/risk-on/risk-off.' },
+      { market: 'indices', tag: 'US Index', name: 'YM / Dow / DIA', aliases: 'ym dow dia mym', basis: 'NY cash / CME', windows: '09:30 cash open, NY AM, PM session', dst: 'Okna NY są stałe; w Polsce +6h albo +5h.', note: 'Używaj logiki indeksów USA, nie Forex London KZ.' },
+      { market: 'indices', tag: 'US Index', name: 'RTY / Russell / IWM', aliases: 'rty russell iwm m2k', basis: 'NY cash / CME', windows: '09:30 cash open, NY AM, PM session', dst: 'Okna NY są stałe; w Polsce +6h albo +5h.', note: 'Często inny charakter zmienności niż ES/NQ.' },
+      { market: 'indices', tag: 'Europe Index', name: 'DAX / GER40 / FDAX', aliases: 'dax ger40 germany 40 fdax de40', basis: 'Frankfurt / Europe local', windows: 'Europe open, London, local cash/futures session, London Fix', dst: 'Europa zmienia czas inaczej niż USA; w przejściu relacja do NY jest inna.', note: 'CFD GER40, cash DAX i futures FDAX mogą mieć różne harmonogramy. Sprawdzaj feed brokera/giełdy.' },
+      { market: 'indices', tag: 'Europe Index', name: 'FTSE / UK100', aliases: 'ftse uk100 footsie', basis: 'London local', windows: 'London Open, London Fix, local cash session', dst: 'London 08:00 może być 03:00 albo 04:00 NY zależnie od okresu.', note: 'Nie mieszaj go z 09:30 NY cash open dla USA.' },
+      { market: 'indices', tag: 'Europe Index', name: 'CAC40 / FRA40', aliases: 'cac40 fra40 france 40', basis: 'Europe / Paris local', windows: 'Europe open, London, local cash session', dst: 'Europa local względem NY przesuwa się w okresach przejściowych.', note: 'Dla CFD godziny mogą zależeć od brokera.' },
+      { market: 'all', tag: 'Metal', name: 'XAUUSD / Gold / GC', aliases: 'xauusd gold gc zloto', basis: 'NY / CME / broker feed', windows: 'London, 08:30 data, NY AM, settlement context', dst: 'NY data zostają w NY; London local przesuwa się względem NY w przejściu.', note: 'XAUUSD spot/CFD i GC futures mogą mieć inne przerwy oraz feed.' },
+      { market: 'all', tag: 'Metal', name: 'Silver / XAGUSD / SI', aliases: 'silver xagusd si srebro', basis: 'NY / CME / broker feed', windows: 'London, 08:30 data, NY AM', dst: 'Jak przy złocie: oddziel London local od NY data.', note: 'Reakcje często korelują z USD i yields.' },
+      { market: 'all', tag: 'Energy', name: 'WTI / CL / USOIL', aliases: 'wti cl usoil crude oil ropa', basis: 'NY / CME / energy session', windows: 'NY AM, inventory data, settlement context', dst: 'NY godziny zostają stałe; w Polsce +6h albo +5h.', note: 'Dane o zapasach i settlement mogą być ważniejsze niż klasyczne killzone.' },
+      { market: 'all', tag: 'Energy', name: 'Natural Gas / NG', aliases: 'natural gas ng gaz', basis: 'NY / CME / energy session', windows: 'NY AM, inventory data, settlement context', dst: 'NY godziny zostają stałe; w Polsce +6h albo +5h.', note: 'Bardzo instrument-specific. Sprawdź kontrakt i godziny feedu.' }
+    ];
+
+    const libraryProfiles = [
+      { id: 'all', label: 'Wszystkie instrumenty', market: 'all', focus: [], summary: 'Pełna biblioteka okien czasowych. Użyj zakładek, rynku i wyszukiwarki, żeby zawęzić listę.' },
+      { id: 'nasdaq', label: 'Nasdaq / NQ / MNQ / QQQ', market: 'indices', focus: ['us-index', 'indices', 'ny', 'cash', 'data', 'macro', 'silver', 'bond', 'cme-index'], summary: 'Najważniejsze dla Nasdaq: dane 08:30, cash open 09:30, open range, NY AM, lunch, PM, makra, bond close i kontekst CME.' },
+      { id: 'sp500', label: 'S&P 500 / ES / MES / SPY', market: 'indices', focus: ['us-index', 'indices', 'ny', 'cash', 'data', 'macro', 'silver', 'bond', 'cme-index'], summary: 'Najważniejsze dla ES/SPX: cash open 09:30, dane USA, open range, NY AM/PM, makra i końcówka cash session.' },
+      { id: 'dow-russell', label: 'Dow / YM / Russell / RTY', market: 'indices', focus: ['us-index', 'indices', 'ny', 'cash', 'data', 'macro', 'silver', 'bond', 'cme-index'], summary: 'Logika podobna do indeksów USA: 09:30 cash open, AM/PM, dane i makra NY.' },
+      { id: 'dax', label: 'DAX / GER40 / FDAX', market: 'indices', focus: ['europe-index', 'europe', 'official-eu', 'london', 'fix', 'data', 'macro'], summary: 'Dla DAX/GER40 najpierw patrz na Frankfurt/Xetra i Europę, dopiero później na wpływ danych USA i risk flow z NY.' },
+      { id: 'eurusd', label: 'EURUSD / 6E', market: 'futures', focus: ['fx', 'forex', 'europe', 'london', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'ny-cut', 'cbdr'], summary: 'Dla EURUSD/6E kluczowe są London, NY Open, dane USA, NY Cut, makra, CME FX RTH i CBDR/Flout.' },
+      { id: 'gbpusd', label: 'GBPUSD / 6B', market: 'futures', focus: ['fx', 'forex', 'europe', 'london', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'ny-cut', 'cbdr'], summary: 'Dla GBPUSD mocno pilnuj London Open/Fix oraz okresów przejściowych NY ↔ London.' },
+      { id: 'usdjpy', label: 'USDJPY / 6J', market: 'futures', focus: ['fx', 'forex', 'tokyo', 'asia', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'cbdr'], summary: 'Dla JPY dodaj Tokyo/Asian Killzone, bo Japonia nie zmienia czasu i start Azji przesuwa się względem NY.' },
+      { id: 'gold', label: 'Gold / XAUUSD / GC', market: 'all', focus: ['metal', 'commodity', 'ny', 'data', 'macro', 'london', 'bond', 'cash', 'cme-index'], summary: 'Dla złota ważne są London, dane USA, yields/bond close, NY AM/PM oraz makra. Feed spot/CFD i GC mogą mieć inne przerwy.' },
+      { id: 'oil', label: 'WTI / CL / USOIL', market: 'all', focus: ['energy', 'commodity', 'ny', 'data', 'macro', 'cme-energy'], summary: 'Dla ropy najważniejsze są NY AM, dane USA, specyficzne publikacje energy i settlement/koniec sesji kontraktu.' },
+      { id: 'cme-fx', label: 'CME FX futures / 6E 6B 6J', market: 'futures', focus: ['fx', 'forex', 'cme-fx', 'ny', 'data', 'macro', 'silver'], summary: 'Profil pod kontrakty FX futures: CME RTH 08:20, przerwa 17:00-18:00, Globex reopen, dane i okna NY.' }
+    ];
+
+    function setPressed(buttons, attr, value) {
+      buttons.forEach((button) => {
+        button.setAttribute('aria-pressed', button.getAttribute(attr) === value ? 'true' : 'false');
+      });
+    }
+
+    function marketMatches(value) {
+      return activeMarket === 'all' || value === 'all' || value === activeMarket;
+    }
+
+    function nthWeekday(year, month, weekday, nth) {
+      const date = new Date(year, month, 1);
+      const offset = (weekday - date.getDay() + 7) % 7;
+      return new Date(year, month, 1 + offset + (nth - 1) * 7);
+    }
+
+    function lastWeekday(year, month, weekday) {
+      const date = new Date(year, month + 1, 0);
+      const offset = (date.getDay() - weekday + 7) % 7;
+      return new Date(year, month, date.getDate() - offset);
+    }
+
+    function addDays(date, days) {
+      const next = new Date(date);
+      next.setDate(next.getDate() + days);
+      return next;
+    }
+
+    function fmt(date) {
+      return `${date.getDate()} ${months[date.getMonth()]}`;
+    }
+
+    function yearProgress(date) {
+      const start = new Date(date.getFullYear(), 0, 1);
+      const end = new Date(date.getFullYear() + 1, 0, 1);
+      return Math.max(6, Math.round(((date - start) / (end - start)) * 100));
+    }
+
+    function periodProgress(date, periodStart, periodEnd) {
+      const start = new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate()).getTime();
+      const end = new Date(periodEnd.getFullYear(), periodEnd.getMonth(), periodEnd.getDate()).getTime();
+      const current = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+      if (current < start || current > end) return null;
+      if (end === start) return 50;
+      return Math.max(0, Math.min(100, ((current - start) / (end - start)) * 100));
+    }
+
+    function renderDSTTimeline() {
+      const usStart = nthWeekday(selectedYear, 2, 0, 2);
+      const euStart = lastWeekday(selectedYear, 2, 0);
+      const euEnd = lastWeekday(selectedYear, 9, 0);
+      const usEnd = nthWeekday(selectedYear, 10, 0, 1);
+      const periods = [
+        { start: new Date(selectedYear, 0, 1), end: addDays(usStart, -1), label: 'układ zimowy', offset: 'PL = NY + 6h', transition: false },
+        { start: usStart, end: addDays(euStart, -1), label: 'przejście wiosenne', offset: 'PL = NY + 5h', transition: true },
+        { start: euStart, end: addDays(euEnd, -1), label: 'układ letni', offset: 'PL = NY + 6h', transition: false },
+        { start: euEnd, end: addDays(usEnd, -1), label: 'przejście jesienne', offset: 'PL = NY + 5h', transition: true },
+        { start: usEnd, end: new Date(selectedYear, 11, 31), label: 'układ zimowy', offset: 'PL = NY + 6h', transition: false }
+      ];
+
+      dstTimeline.innerHTML = periods.map((period) => {
+        const today = selectedDate.getFullYear() === selectedYear ? periodProgress(selectedDate, period.start, period.end) : null;
+        return `
+        <div class="period ${period.transition ? 'transition' : ''} ${today === null ? '' : 'current'}" style="--w: ${yearProgress(period.end)}%">
+          <div><strong>${fmt(period.start)} - ${fmt(period.end)}</strong><span>${period.label}</span></div>
+          <div class="bar" aria-hidden="true"></div>
+          <div class="time">${period.offset}</div>
+        </div>
+      `;
+      }).join('');
+    }
+
+    function dateKey(date) {
+      return date.toISOString().slice(0, 10);
+    }
+
+    function classifyDate(date) {
+      const year = date.getFullYear();
+      const usStart = nthWeekday(year, 2, 0, 2);
+      const euStart = lastWeekday(year, 2, 0);
+      const euEnd = lastWeekday(year, 9, 0);
+      const usEnd = nthWeekday(year, 10, 0, 1);
+      const time = new Date(year, date.getMonth(), date.getDate()).getTime();
+      const isSpringTransition = time >= usStart.getTime() && time < euStart.getTime();
+      const isAutumnTransition = time >= euEnd.getTime() && time < usEnd.getTime();
+      const isTransition = isSpringTransition || isAutumnTransition;
+      const nySummer = time >= usStart.getTime() && time < usEnd.getTime();
+      const euSummer = time >= euStart.getTime() && time < euEnd.getTime();
+
+      return {
+        year,
+        usStart,
+        euStart,
+        euEnd,
+        usEnd,
+        isTransition,
+        nySummer,
+        euSummer,
+        nyUtc: nySummer ? -4 : -5,
+        plUtc: euSummer ? 2 : 1,
+        londonUtc: euSummer ? 1 : 0,
+        tokyoUtc: 9,
+        relation: isTransition ? 'PL = NY + 5h' : 'PL = NY + 6h',
+        londonOpenNy: isTransition ? 4 : 3,
+        frankfurtNy: isTransition ? 3 : 2,
+        londonFixNy: isTransition ? 12 : 11,
+        tokyoOpenNy: nySummer ? 20 : 19,
+        tokyoOpenPl: euSummer ? '02:00 PL' : '01:00 PL',
+        status: isTransition ? (isSpringTransition ? 'okres przejściowy wiosenny' : 'okres przejściowy jesienny') : (nySummer && euSummer ? 'normalny układ letni' : 'normalny układ zimowy')
+      };
+    }
+
+    function asTime(value) {
+      const normalized = ((value % 24) + 24) % 24;
+      const hour = Math.floor(normalized);
+      const minutes = Math.round((normalized - hour) * 60);
+      return `${String(hour).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    }
+
+    function currentNyHour(cfg) {
+      const now = new Date();
+      const utcHour = now.getUTCHours() + (now.getUTCMinutes() / 60);
+      return ((utcHour + cfg.nyUtc) % 24 + 24) % 24;
+    }
+
+    function addHourLabel(value, offset) {
+      return asTime(value + offset);
+    }
+
+    function utcLabel(offset) {
+      return `UTC${offset >= 0 ? '+' : ''}${offset}`;
+    }
+
+    function renderDayBrief() {
+      const cfg = classifyDate(selectedDate);
+      briefStatus.textContent = `Obecnie: ${cfg.status}`;
+      briefRelation.textContent = cfg.relation;
+      briefUtc.textContent = `NY ${utcLabel(cfg.nyUtc)} / PL ${utcLabel(cfg.plUtc)} / London ${utcLabel(cfg.londonUtc)}`;
+      briefLondonOpen.textContent = `${asTime(cfg.londonOpenNy)} NY / 09:00 PL`;
+      briefTokyoOpen.textContent = `${asTime(cfg.tokyoOpenNy)} NY / ${cfg.tokyoOpenPl}`;
+      briefNyData.textContent = `08:30 NY / ${nyToPl(8.5, cfg)} PL`;
+      briefCashOpen.textContent = `09:30 NY / ${nyToPl(9.5, cfg)} PL`;
+    }
+
+    function renderAxisStatus(cfg) {
+      axisStatus.innerHTML = `
+        <div><span>Oś liczona dla</span><strong>${selectedDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })}</strong></div>
+        <div><span>Relacja PL/NY</span><strong>${cfg.relation}</strong></div>
+        <div><span>Teraz</span><strong>${nowLabelNy}</strong></div>
+        <div><span>UTC</span><strong>NY ${utcLabel(cfg.nyUtc)} / PL ${utcLabel(cfg.plUtc)}</strong></div>
+        <div><span>London Open</span><strong>${asTime(cfg.londonOpenNy)} NY / 08:00 London</strong></div>
+        <div><span>Tokyo Open</span><strong>${asTime(cfg.tokyoOpenNy)} NY / 09:00 JST</strong></div>
+        <div><span>Marker</span><label class="axis-toggle"><input id="nowToggle" type="checkbox" ${showNowLine ? 'checked' : ''}>Pokaż teraz</label></div>
+      `;
+      const nowToggle = document.querySelector('#nowToggle');
+      nowToggle.addEventListener('change', () => {
+        showNowLine = nowToggle.checked;
+        updateNowLinePosition();
+      });
+    }
+
+    function nyToPl(value, cfg) {
+      return addHourLabel(value, cfg.isTransition ? 5 : 6);
+    }
+
+    function nyRangeToPl(start, end, cfg) {
+      return `${nyToPl(start, cfg)}-${nyToPl(end, cfg)} PL`;
+    }
+
+    function libraryRange(start, end, cfg) {
+      return {
+        ny: `${asTime(start)}-${asTime(end)} NY`,
+        pl: nyRangeToPl(start, end, cfg)
+      };
+    }
+
+    function libraryPoint(value, cfg) {
+      return {
+        ny: `${asTime(value)} NY`,
+        pl: `${nyToPl(value, cfg)} PL`
+      };
+    }
+
+    function buildTimeItems(cfg) {
+      const londonKz = libraryRange(cfg.londonOpenNy - 2, cfg.londonOpenNy + 2, cfg);
+      const xetra = libraryRange(cfg.londonOpenNy, cfg.londonFixNy + .5, cfg);
+      const tokyo = libraryRange(cfg.tokyoOpenNy, cfg.tokyoOpenNy + 4, cfg);
+      const macroTimes = [
+        ['07:50', 7.833, 8.167, 'AM', 'Przed głównymi danymi 08:30 NY.'],
+        ['08:50', 8.833, 9.167, 'AM', 'Po danych 08:30 NY, przed cash open.'],
+        ['09:50', 9.833, 10.167, 'AM', 'Wokół 10:00 NY i po pierwszej reakcji cash open.'],
+        ['10:50', 10.833, 11.167, 'AM', 'Końcówka głównego impulsu AM.'],
+        ['11:50', 11.833, 12.167, 'AM', 'Przejście AM w midday.'],
+        ['12:50', 12.833, 13.167, 'PM', 'Start części PM.'],
+        ['13:20', 13.333, 13.667, 'PM', 'PM continuation / repricing context.'],
+        ['14:50', 14.833, 15.167, 'PM', 'Końcówka istotnej części popołudnia.'],
+        ['15:15', 15.25, 15.75, 'PM', 'Late PM context.'],
+        ['15:50', 15.833, 16.167, 'PM', 'Close / late-day repricing.']
+      ];
+
+      const items = [
+        { title: 'Midnight Open', category: 'ict', market: 'all', clock: 'ny', time: libraryPoint(0, cfg), base: 'NY time', source: 'ICT', tags: ['ny', 'reference'], note: 'Poziom referencyjny dnia NY.' },
+        { title: 'Frankfurt / Early Europe', category: 'sessions', market: 'all', clock: 'europe', time: { ny: `${asTime(cfg.frankfurtNy)} NY`, pl: '08:00 PL' }, base: '08:00 Europe/PL', source: 'Europe local', tags: ['europe', 'london', 'forex', 'europe-index'], note: 'Start aktywności europejskiej przed właściwym London Open.' },
+        { title: 'London Open', category: 'sessions', market: 'all', clock: 'europe', time: { ny: `${asTime(cfg.londonOpenNy)} NY`, pl: '09:00 PL' }, base: '08:00 London', source: 'London local', tags: ['europe', 'london', 'forex', 'europe-index'], note: 'Punkt odniesienia to 08:00 London, nie sztywne 03:00 NY.' },
+        { title: 'London Open Killzone', category: 'sessions', market: 'futures', clock: 'europe', time: londonKz, base: 'London / Europe local', source: 'ICT', tags: ['europe', 'london', 'forex', 'fx'], note: 'Szerokie okno europejskiej zmienności dla FX.' },
+        { title: 'Xetra Cash Session', category: 'official', market: 'indices', clock: 'europe', time: xetra, base: '09:00-17:30 Frankfurt/PL', source: 'Deutsche Boerse / Xetra', tags: ['official-eu', 'europe-index', 'europe'], note: 'Oficjalna główna sesja cash Xetra dla niemieckiego rynku.' },
+        { title: 'London Fix', category: 'official', market: 'all', clock: 'europe', time: { ny: `${asTime(cfg.londonFixNy)} NY`, pl: '17:00 PL' }, base: '16:00 London', source: 'London local', tags: ['fix', 'london', 'forex', 'europe'], note: 'Fixing walutowy i potencjalny przepływ przy końcu Londynu.' },
+        { title: 'Tokyo Open', category: 'sessions', market: 'futures', clock: 'tokyo', time: { ny: `${asTime(cfg.tokyoOpenNy)} NY`, pl: cfg.tokyoOpenPl }, base: '09:00 JST', source: 'Tokyo local', tags: ['tokyo', 'asia', 'forex', 'fx'], note: 'Tokyo nie zmienia czasu, więc względem NY wypada 19:00 albo 20:00.' },
+        { title: 'Asian Killzone - Tokyo version', category: 'sessions', market: 'futures', clock: 'tokyo', time: tokyo, base: '09:00-13:00 JST', source: 'Tokyo local', tags: ['tokyo', 'asia', 'forex', 'fx'], note: 'Wersja liczona od Tokyo, a nie sztywne 20:00-00:00 NY przez cały rok.' },
+        { title: 'Asian Killzone - fixed NY', category: 'sessions', market: 'futures', clock: 'ny', time: libraryRange(20, 24, cfg), base: '20:00-00:00 NY', source: 'NY chart', tags: ['asia', 'forex', 'fx', 'ny'], note: 'Wersja oparta o stały wykres NY. W Polsce przechodzi na kolejny dzień.' },
+        { title: 'NY Premarket', category: 'sessions', market: 'indices', clock: 'ny', time: libraryRange(7, 9.5, cfg), base: 'NY time', source: 'ICT / market context', tags: ['indices', 'us-index', 'ny', 'cash'], note: 'Okno przed cash open akcji USA.' },
+        { title: 'USA Data / News Embargo', category: 'official', market: 'all', clock: 'ny', time: libraryPoint(8.5, cfg), base: '08:30 NY', source: 'US data calendar', tags: ['data', 'ny', 'us-index', 'forex', 'metal', 'commodity'], note: 'CPI, NFP, Claims, Retail Sales i inne high impact.' },
+        { title: 'CME FX Futures RTH Open', category: 'cme', market: 'futures', clock: 'cme', time: libraryPoint(8.333, cfg), base: '08:20 NY / 07:20 CT', source: 'CME FX futures', tags: ['cme-fx', 'forex', 'fx'], note: 'Regular hours open dla FX futures, np. 6E, 6B, 6J.' },
+        { title: 'US Equities Cash Open', category: 'official', market: 'indices', clock: 'ny', time: libraryPoint(9.5, cfg), base: '09:30 NY', source: 'NYSE/Nasdaq cash', tags: ['cash', 'indices', 'us-index', 'ny', 'official-us'], note: 'True Day Start dla akcji i indeksów USA.' },
+        { title: 'Indices Open Range', category: 'ict', market: 'indices', clock: 'ny', time: libraryRange(9.5, 10.5, cfg), base: 'NY cash session', source: 'ICT / index context', tags: ['indices', 'us-index', 'cash', 'ny'], note: 'Pierwsza godzina cash session dla ES/NQ/YM/RTY.' },
+        { title: 'New York Open Killzone - FX', category: 'sessions', market: 'futures', clock: 'ny', time: libraryRange(7, 10, cfg), base: 'NY time', source: 'ICT', tags: ['forex', 'fx', 'ny', 'data'], note: 'Główne okno NY dla FX, szczególnie wokół danych i cash open.' },
+        { title: 'NY AM Session - Indices', category: 'sessions', market: 'indices', clock: 'ny', time: libraryRange(8.5, 11, cfg), base: 'NY time', source: 'ICT', tags: ['indices', 'us-index', 'ny', 'cash', 'data'], note: 'Dane USA, cash open i pierwsza fala zmienności indeksów.' },
+        { title: 'AM Silver Bullet', category: 'ict', market: 'all', clock: 'ny', time: libraryRange(3, 4, cfg), base: 'NY time', source: 'ICT Silver Bullet', tags: ['silver', 'ny', 'forex', 'indices'], note: 'Jeden z trzech Silver Bulletów w tej tabeli.' },
+        { title: 'NY Silver Bullet', category: 'ict', market: 'all', clock: 'ny', time: libraryRange(10, 11, cfg), base: 'NY time', source: 'ICT Silver Bullet', tags: ['silver', 'ny', 'forex', 'indices'], note: 'Drugi Silver Bullet, często wokół drugiej fali NY.' },
+        { title: 'PM Silver Bullet', category: 'ict', market: 'all', clock: 'ny', time: libraryRange(14, 15, cfg), base: 'NY time', source: 'ICT Silver Bullet', tags: ['silver', 'ny', 'forex', 'indices'], note: 'Trzeci Silver Bullet. Bez dodatkowych wymyślonych SB.' },
+        { title: 'NY Lunch', category: 'ict', market: 'all', clock: 'ny', time: libraryRange(12, 13.5, cfg), base: 'NY time', source: 'ICT / session context', tags: ['ny', 'lunch', 'indices', 'forex'], note: 'Często spadek aktywności instytucjonalnej między AM i PM.' },
+        { title: 'PM Open', category: 'ict', market: 'indices', clock: 'ny', time: libraryPoint(13.5, cfg), base: '13:30 NY', source: 'ICT index context', tags: ['indices', 'us-index', 'ny'], note: 'Powrót aktywności po lunchu i decyzja continuation/reversal.' },
+        { title: 'NY PM Session', category: 'sessions', market: 'all', clock: 'ny', time: libraryRange(13, 16, cfg), base: 'NY time', source: 'ICT', tags: ['ny', 'indices', 'forex'], note: 'Popołudniowe okno NY, często continuation albo reversal względem AM.' },
+        { title: 'NY Cut / FX Options Expiry', category: 'ict', market: 'futures', clock: 'ny', time: libraryPoint(10, cfg), base: '10:00 NY', source: 'FX options context', tags: ['ny-cut', 'forex', 'fx', 'ny'], note: 'Wygasanie opcji FX OTC. Może wzmacniać reakcje wokół 10:00 NY.' },
+        { title: 'CBDR', category: 'ict', market: 'futures', clock: 'ny', time: libraryRange(14, 20, cfg), base: '14:00-20:00 NY', source: 'ICT FX concept', tags: ['cbdr', 'forex', 'fx'], note: 'Central Bank Dealers Range. Koncept stricte walutowy.' },
+        { title: 'Flout / Post-CBDR', category: 'ict', market: 'futures', clock: 'ny', time: libraryRange(20, 24, cfg), base: '20:00-00:00 NY', source: 'ICT FX concept', tags: ['cbdr', 'forex', 'fx', 'asia'], note: 'Ruch po CBDR, kontekst dla Azji i kolejnego dnia.' },
+        { title: 'Bond Closing Hour', category: 'official', market: 'all', clock: 'ny', time: libraryRange(15, 16, cfg), base: '15:00-16:00 NY', source: 'US bonds / futures context', tags: ['bond', 'ny', 'indices', 'metal'], note: 'Możliwy hedging flow w indeksach, USD i złocie.' },
+        { title: 'NYSE Cash Close', category: 'official', market: 'indices', clock: 'ny', time: libraryPoint(16, cfg), base: '16:00 NY', source: 'NYSE/Nasdaq cash', tags: ['cash', 'indices', 'us-index', 'official-us'], note: 'Zamknięcie regularnej sesji akcji USA.' },
+        { title: 'CME Daily Technical Break', category: 'cme', market: 'all', clock: 'cme', time: libraryRange(17, 18, cfg), base: '17:00-18:00 NY', source: 'CME Globex', tags: ['cme-fx', 'cme-index', 'cme-energy'], note: 'Codzienna przerwa techniczna futures.' },
+        { title: 'CME Globex Daily Reopen', category: 'cme', market: 'all', clock: 'cme', time: libraryPoint(18, cfg), base: '18:00 NY', source: 'CME Globex', tags: ['cme-fx', 'cme-index', 'cme-energy'], note: 'Start nowego dnia futures po przerwie technicznej.' },
+        { title: 'CME FX Futures RTH Close', category: 'cme', market: 'futures', clock: 'cme', time: libraryPoint(15, cfg), base: '15:00 NY / 14:00 CT', source: 'CME FX futures', tags: ['cme-fx', 'forex', 'fx'], note: 'Regular hours close dla FX futures.' },
+        { title: 'Weekly Globex Open', category: 'cme', market: 'all', clock: 'cme', time: { ny: 'Sunday 18:00 NY', pl: cfg.isTransition ? 'Sunday 23:00 PL' : 'Monday 00:00 PL' }, base: 'Sunday 18:00 NY / 17:00 CT', source: 'CME Globex', tags: ['cme-fx', 'cme-index', 'cme-energy'], note: 'Start nowego tygodnia futures.' }
+      ];
+
+      macroTimes.forEach(([label, start, end, segment, note]) => {
+        items.push({
+          title: `ICT Macro ${label}-${asTime(end)}`,
+          category: 'macros',
+          market: 'all',
+          clock: 'ny',
+          time: libraryRange(start, end, cfg),
+          base: 'NY time',
+          source: `ICT Macro ${segment}`,
+          tags: ['macro', 'ny', 'indices', 'forex', 'commodity'],
+          note
+        });
+      });
+
+      return items;
+    }
+
+    const axisInfo = {
+      'London KZ': { full: 'London Killzone', desc: 'Europejskie okno zmienności wokół London Open. Dla London Open punktem odniesienia jest 08:00 czasu londyńskiego.' },
+      'Premarket': { full: 'NY Premarket', desc: 'Okno przed otwarciem cash session akcji USA. Istotne głównie dla indeksów i futures USA.' },
+      'NY AM': { full: 'New York AM Session', desc: 'Główne poranne okno NY. Obejmuje dane USA, cash open i pierwszą fazę zmienności sesji USA.' },
+      'NY PM': { full: 'New York PM Session', desc: 'Popołudniowe okno NY po lunchu. Często continuation albo reversal względem ruchu AM.' },
+      'Xetra Cash': { full: 'Frankfurt / Xetra Cash Session', desc: 'Oficjalna główna sesja Xetra dla niemieckiego rynku kasowego: 09:00-17:30 czasu Frankfurt/PL. Na osi przeliczona dynamicznie na NY.' },
+      'Asian Killzone': { full: 'Asian Killzone / Tokyo window', desc: 'Okno azjatyckie liczone od Tokyo. Tokyo nie zmienia czasu, dlatego względem NY start może wypadać o 19:00 albo 20:00.' },
+      'London Fix': { full: 'London Fix', desc: 'Fixing walutowy około 16:00 London. Lokalnie dla Polski najczęściej 17:00, ale względem NY przesuwa się w okresach przejściowych.' },
+      'NY Open KZ': { full: 'New York Open Killzone', desc: 'Główne okno NY dla Forexu i FX futures, szczególnie wokół danych USA oraz otwarcia akcji.' },
+      'NY Silver': { full: 'NY Silver Bullet', desc: 'Jeden z trzech Silver Bulletów w tej tabeli. Okno 10:00-11:00 NY.' },
+      'RTH 08:20': { full: 'CME FX Futures RTH Open', desc: 'Regular Hours Trading open dla FX futures na CME. Nie mylić z danymi USA o 08:30 NY.' },
+      'Break': { full: 'CME Daily Technical Break', desc: 'Codzienna przerwa techniczna futures, zwykle 17:00-18:00 NY.' },
+      'Reopen': { full: 'CME Globex Reopen', desc: 'Ponowne otwarcie Globex po przerwie technicznej i start nowego dnia futures.' },
+      'CBDR': { full: 'Central Bank Dealers Range', desc: 'Koncept walutowy. Zakres 14:00-20:00 NY używany jako referencja dla późniejszego Flout.' },
+      'Flout': { full: 'Flout / Post-CBDR', desc: 'Ruch po zakończeniu CBDR. Używany jako kontekst kierunkowy dla Azji i kolejnego dnia.' },
+      'NY Lunch': { full: 'New York Lunch', desc: 'Okno 12:00-13:30 NY, w którym często spada aktywność instytucjonalna. Traktuj jako kontekst, nie jako osobny open.' },
+      'AM SB': { full: 'AM Silver Bullet', desc: 'Jeden z trzech Silver Bulletów. Okno 03:00-04:00 NY.' },
+      'NY SB': { full: 'NY Silver Bullet', desc: 'Jeden z trzech Silver Bulletów. Okno 10:00-11:00 NY.' },
+      'PM SB': { full: 'PM Silver Bullet', desc: 'Jeden z trzech Silver Bulletów. Okno 14:00-15:00 NY.' },
+      '08:30 data': { full: 'USA Data / News Embargo', desc: 'Czas najważniejszych danych USA, np. CPI, NFP, Claims, Retail Sales.' },
+      '09:30 cash': { full: 'US Equities Cash Open', desc: 'Otwarcie rynku akcji USA. Kluczowe dla indeksów, nie jest to Forex open.' },
+      '10:00 NY Cut': { full: 'NY Cut / FX Options Expiry', desc: 'Codzienny moment wygasania opcji FX OTC. Może wzmacniać reakcję wokół 09:50-10:10.' },
+      'Bond Close': { full: 'Bond Closing Hour', desc: 'Okno zamykania sesji futures na obligacje USA. Może wpływać na indeksy, USD i złoto.' }
+    };
+
+    ['07:50', '08:50', '09:50', '10:50', '11:50', '12:50', '13:20', '14:50', '15:15', '15:50'].forEach((label) => {
+      const endMap = {
+        '07:50': '08:10',
+        '08:50': '09:10',
+        '09:50': '10:10',
+        '10:50': '11:10',
+        '11:50': '12:10',
+        '12:50': '13:10',
+        '13:20': '13:40',
+        '14:50': '15:10',
+        '15:15': '15:45',
+        '15:50': '16:10'
+      };
+      axisInfo[label] = {
+        full: `ICT Macro ${label}-${endMap[label]}`,
+        desc: 'Dwudziestominutowe okno algorytmiczne. Na osi pokazane jako mały marker, a pełny czas i opis widzisz tutaj po najechaniu.'
+      };
+    });
+
+    function bar(label, start, end, cls) {
+      if (end <= start) {
+        return `${bar(label, start, 24, cls)}${bar(label, 0, end, cls)}`;
+      }
+      const duration = end - start;
+      const size = duration < .75 ? 'tiny' : duration < 1.4 ? 'compact' : '';
+      const full = axisInfo[label] || { full: label, desc: 'Okno czasowe na osi sesji.' };
+      return `<span class="axis-bar ${cls} ${size}" tabindex="0" data-label="${label}" data-full="${full.full}" data-time="${asTime(start)}-${asTime(end)} NY" data-desc="${full.desc}" style="--start:${(start / 24) * 100}%;--width:${(duration / 24) * 100}%">${size ? '' : label}</span>`;
+    }
+
+    function pin(hour) {
+      return `<span class="axis-pin" style="--x:${(hour / 24) * 100}%"></span>`;
+    }
+
+    let nowHourNy = 0;
+    let nowLabelNy = '00:00 NY';
+    let showNowLine = true;
+
+    function axisRow(label, bars) {
+      return `
+        <div class="axis-row">
+          <div class="axis-label">${label}</div>
+          <div>
+            <div class="axis-track">${bars.join('')}</div>
+            <div class="axis-hours"><span>00 NY</span><span>04</span><span>08</span><span>12</span><span>16</span><span>20</span><span>24</span></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateNowLinePosition() {
+      const line = document.querySelector('#axisNowLine');
+      const firstTrack = timeAxis.querySelector('.axis-track');
+      if (!line || !firstTrack) return;
+
+      const axisRect = timeAxis.getBoundingClientRect();
+      const trackRect = firstTrack.getBoundingClientRect();
+      const x = trackRect.left - axisRect.left + (nowHourNy / 24) * trackRect.width;
+      line.style.setProperty('--now-x', `${x}px`);
+      line.dataset.now = nowLabelNy;
+      line.setAttribute('aria-label', `Teraz: ${nowLabelNy}`);
+      line.classList.toggle('is-hidden', !showNowLine);
+    }
+
+    function renderTimeAxis() {
+      selectedDate = new Date();
+      const cfg = classifyDate(selectedDate);
+      const rows = [];
+      nowHourNy = currentNyHour(cfg);
+      nowLabelNy = `${asTime(nowHourNy)} NY / ${nyToPl(nowHourNy, cfg)} PL`;
+      renderAxisStatus(cfg);
+
+      if (activeMarket !== 'futures') {
+        rows.push(axisRow('Indeksy: Europa', [
+          bar('London KZ', cfg.frankfurtNy, cfg.frankfurtNy + 3, 'eu')
+        ]));
+        rows.push(axisRow('Indeksy: Frankfurt', [
+          bar('Xetra Cash', cfg.londonOpenNy, cfg.londonFixNy + .5, 'eu')
+        ]));
+        rows.push(axisRow('Indeksy: NY', [
+          bar('Premarket', 7, 9.5, 'ny'),
+          bar('NY AM', 8.5, 11, 'ny'),
+          bar('NY Lunch', 12, 13.5, 'ny'),
+          bar('NY PM', 13, 16, 'ny')
+        ]));
+      }
+
+      if (activeMarket !== 'indices') {
+        rows.push(axisRow('FX: Asia / Tokyo', [
+          bar('Asian Killzone', cfg.tokyoOpenNy, cfg.tokyoOpenNy + 4 > 24 ? cfg.tokyoOpenNy + 4 - 24 : cfg.tokyoOpenNy + 4, 'asia')
+        ]));
+        rows.push(axisRow('FX: London', [
+          bar('London KZ', cfg.londonOpenNy - 2, cfg.londonOpenNy + 2, 'eu'),
+          bar('London Fix', cfg.londonFixNy - .25, cfg.londonFixNy + .25, 'eu')
+        ]));
+        rows.push(axisRow('FX: NY', [
+          bar('NY Open KZ', 7, 10, 'ny'),
+          bar('NY Silver', 10, 11, 'ny'),
+          bar('NY Lunch', 12, 13.5, 'ny'),
+          bar('NY PM', 13, 16, 'ny')
+        ]));
+        rows.push(axisRow('FX: CBDR', [
+          bar('CBDR', 14, 20, 'asia'),
+          bar('Flout', 20, 24, 'asia')
+        ]));
+        rows.push(axisRow('CME FX futures', [
+          bar('RTH 08:20', 8.333, 8.75, 'cme'),
+          bar('Break', 17, 18, 'cme'),
+          bar('Reopen', 18, 18.4, 'cme')
+        ]));
+      }
+
+      rows.push(axisRow('ICT Macros', [
+        bar('07:50', 7.833, 8.167, 'macro'),
+        bar('08:50', 8.833, 9.167, 'macro'),
+        bar('09:50', 9.833, 10.167, 'macro'),
+        bar('10:50', 10.833, 11.167, 'macro'),
+        bar('11:50', 11.833, 12.167, 'macro'),
+        bar('12:50', 12.833, 13.167, 'macro'),
+        bar('13:20', 13.333, 13.667, 'macro'),
+        bar('14:50', 14.833, 15.167, 'macro'),
+        bar('15:15', 15.25, 15.75, 'macro'),
+        bar('15:50', 15.833, 16.167, 'macro')
+      ]));
+
+      rows.push(axisRow('Silver Bullets', [
+        bar('AM SB', 3, 4, 'ny'),
+        bar('NY SB', 10, 11, 'ny'),
+        bar('PM SB', 14, 15, 'ny')
+      ]));
+
+      rows.push(axisRow('Stałe punkty NY', [
+        pin(0),
+        bar('08:30 data', 8.5, 8.62, 'ny'),
+        bar('09:30 cash', 9.5, 9.65, 'ny'),
+        bar('10:00 NY Cut', 10, 10.12, 'ny'),
+        bar('Bond Close', 15, 16, 'cme')
+      ]));
+
+      timeAxis.innerHTML = `${rows.join('')}<span class="axis-now-line" id="axisNowLine" data-now="${nowLabelNy}" aria-label="Teraz: ${nowLabelNy}"></span>`;
+      showAxisEmpty();
+      wireAxisDetails();
+      requestAnimationFrame(updateNowLinePosition);
+    }
+
+    function showAxisEmpty() {
+      axisDetails.classList.remove('is-visible');
+      axisDetails.setAttribute('aria-hidden', 'true');
+    }
+
+    function positionAxisDetails(el) {
+      const rect = el.getBoundingClientRect();
+      const width = axisDetails.offsetWidth || 380;
+      const height = axisDetails.offsetHeight || 140;
+      const margin = 12;
+      const navOffset = 72;
+      let left = rect.left + (rect.width / 2) - (width / 2);
+      let top = rect.top - height - margin;
+
+      left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
+      if (top < navOffset) {
+        top = rect.bottom + margin;
+      }
+
+      axisDetails.style.left = `${left}px`;
+      axisDetails.style.top = `${top}px`;
+    }
+
+    function showAxisDetails(el) {
+      axisDetails.innerHTML = `
+        <span class="control-label">Szczegóły osi</span>
+        <h3>${el.dataset.full}</h3>
+        <div class="mini-grid">
+          <div><span>Skrót</span><strong>${el.dataset.label}</strong></div>
+          <div><span>Czas NY</span><strong>${el.dataset.time}</strong></div>
+        </div>
+        <p>${el.dataset.desc}</p>
+      `;
+      axisDetails.classList.add('is-visible');
+      axisDetails.setAttribute('aria-hidden', 'false');
+      positionAxisDetails(el);
+    }
+
+    function wireAxisDetails() {
+      document.querySelectorAll('.axis-bar').forEach((el) => {
+        el.addEventListener('mouseenter', () => showAxisDetails(el));
+        el.addEventListener('mouseleave', showAxisEmpty);
+        el.addEventListener('focus', () => showAxisDetails(el));
+        el.addEventListener('blur', showAxisEmpty);
+        el.addEventListener('click', () => showAxisDetails(el));
+      });
+    }
+
+    function tagClass(item) {
+      if (item.category === 'macros') return 'macro';
+      if (item.category === 'cme' || item.clock === 'cme') return 'cme';
+      if (item.clock === 'europe') return 'eu';
+      if (item.clock === 'tokyo') return 'asia';
+      return 'ny';
+    }
+
+    function currentProfile() {
+      return libraryProfiles.find((profile) => profile.id === activeLibraryInstrument) || libraryProfiles[0];
+    }
+
+    function profileMatchesItem(item, profile) {
+      if (profile.id === 'all') return true;
+      return item.tags.some((tag) => profile.focus.includes(tag));
+    }
+
+    function tabMatchesItem(item, profile) {
+      if (activeLibraryTab === 'all') return true;
+      if (activeLibraryTab === 'recommended') return profileMatchesItem(item, profile);
+      if (activeLibraryTab === 'ict') return item.category === 'ict';
+      return item.category === activeLibraryTab;
+    }
+
+    function renderLibraryOptions() {
+      libraryInstrument.innerHTML = libraryProfiles.map((profile) => (
+        `<option value="${profile.id}">${profile.label}</option>`
+      )).join('');
+      libraryInstrument.value = activeLibraryInstrument;
+    }
+
+    function renderTimeLibrary() {
+      const cfg = classifyDate(selectedDate);
+      const profile = currentProfile();
+      const query = search.value.trim().toLowerCase();
+      const items = buildTimeItems(cfg)
+        .filter((item) => activeLibraryClock === 'all' || item.clock === activeLibraryClock)
+        .filter((item) => tabMatchesItem(item, profile))
+        .filter((item) => {
+          if (!query) return true;
+          return `${item.title} ${item.category} ${item.market} ${item.clock} ${item.base} ${item.source} ${item.tags.join(' ')} ${item.note}`.toLowerCase().includes(query);
+        });
+
+      librarySummary.innerHTML = `
+        <h3>${profile.label}</h3>
+        <p>${profile.summary} Widoczne pozycje: <strong>${items.length}</strong>. Czasy PL liczone są według aktualnego układu: <strong>${cfg.relation}</strong>.</p>
+      `;
+
+      timeLibraryResults.innerHTML = items.length ? items.map((item) => `
+        <article class="window-card">
+          <div>
+            <span class="tag ${tagClass(item)}">${item.source}</span>
+            <h3>${item.title}</h3>
+            <p>${item.note}</p>
+            <div class="window-tags">
+              <span class="mini-tag">${item.category}</span>
+              <span class="mini-tag">${item.market === 'futures' ? 'Forex / futures' : item.market === 'indices' ? 'Indeksy' : 'Multi-market'}</span>
+              ${item.tags.slice(0, 5).map((tag) => `<span class="mini-tag">${tag}</span>`).join('')}
+            </div>
+          </div>
+          <div class="window-meta">
+            <div><span>Czas bazowy</span><strong>${item.base}</strong></div>
+            <div><span>NY</span><strong>${item.time.ny}</strong></div>
+            <div><span>Polska teraz</span><strong>${item.time.pl}</strong></div>
+            <div><span>Zegar</span><strong>${item.clock.toUpperCase()}</strong></div>
+          </div>
+        </article>
+      `).join('') : '<div class="empty-state">Brak wyników dla tych filtrów. Zmień instrument, zakładkę albo wyszukiwaną frazę.</div>';
+    }
+
+    function renderInstruments() {
+      const query = instrumentSearch.value.trim().toLowerCase();
+      const list = instruments
+        .filter((item) => !query || `${item.name} ${item.aliases} ${item.tag}`.toLowerCase().includes(query))
+        .slice(0, 12);
+
+      instrumentResults.innerHTML = list.length ? list.map((item) => `
+        <article class="instrument-card">
+          <span class="tag ${item.market === 'indices' ? 'ny' : item.market === 'futures' ? 'cme' : 'fixed'}">${item.tag}</span>
+          <h3>${item.name}</h3>
+          <div class="mini-grid">
+            <div><span>Czas</span><strong>${item.basis}</strong></div>
+            <div><span>Okna</span><strong>${item.windows}</strong></div>
+            <div><span>DST</span><strong>${item.dst}</strong></div>
+          </div>
+          <p>${item.note}</p>
+        </article>
+      `).join('') : '<p class="foot">Brak wyniku. Spróbuj symbolu albo nazwy rynku, np. NQ, DAX, EURUSD, gold, WTI.</p>';
+    }
+
+    function applyFilters() {
+      const query = search.value.trim().toLowerCase();
+
+      sections.forEach((section) => {
+        const sectionName = section.getAttribute('data-section');
+        const sectionMarket = section.getAttribute('data-market') || 'all';
+        const sectionVisible = (activeSection === 'all' || activeSection === sectionName) && marketMatches(sectionMarket);
+        section.classList.toggle('hidden', !sectionVisible);
+      });
+
+      document.querySelectorAll('tbody tr').forEach((row) => {
+        const text = `${row.innerText} ${row.getAttribute('data-search') || ''}`.toLowerCase();
+        const rowMarket = row.getAttribute('data-market') || 'all';
+        row.classList.toggle('hidden', !marketMatches(rowMarket) || (query.length > 0 && !text.includes(query)));
+      });
+    }
+
+    marketButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeMarket = button.getAttribute('data-market');
+        setPressed(marketButtons, 'data-market', activeMarket);
+        renderTimeAxis();
+      });
+    });
+
+    sectionButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeSection = button.getAttribute('data-filter');
+        setPressed(sectionButtons, 'data-filter', activeSection);
+        applyFilters();
+      });
+    });
+
+    const startYear = selectedYear - 1;
+    for (let year = startYear; year <= selectedYear + 6; year += 1) {
+      const option = document.createElement('option');
+      option.value = String(year);
+      option.textContent = String(year);
+      option.selected = year === selectedYear;
+      yearSelect.appendChild(option);
+    }
+
+    yearSelect.addEventListener('change', () => {
+      selectedYear = Number(yearSelect.value);
+      renderDSTTimeline();
+    });
+
+    function syncTimeViews() {
+      selectedDate = new Date();
+      renderDayBrief();
+      renderDSTTimeline();
+      renderTimeAxis();
+      renderTimeLibrary();
+    }
+
+    libraryInstrument.addEventListener('change', () => {
+      activeLibraryInstrument = libraryInstrument.value;
+      renderTimeLibrary();
+    });
+
+    libraryClock.addEventListener('change', () => {
+      activeLibraryClock = libraryClock.value;
+      renderTimeLibrary();
+    });
+
+    libraryTabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeLibraryTab = button.getAttribute('data-library-tab');
+        setPressed(libraryTabButtons, 'data-library-tab', activeLibraryTab);
+        renderTimeLibrary();
+      });
+    });
+
+    document.querySelectorAll('.row-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        button.closest('tr').classList.toggle('is-open');
+      });
+    });
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      themeToggle.setAttribute('aria-pressed', isDark ? 'false' : 'true');
+      themeIcon.textContent = isDark ? '☾' : '☀';
+      themeText.textContent = isDark ? 'Dark' : 'Light';
+    });
+
+    window.addEventListener('resize', updateNowLinePosition);
+    instrumentSearch.addEventListener('input', renderInstruments);
+    search.addEventListener('input', () => {
+      renderTimeLibrary();
+      applyFilters();
+    });
+    renderLibraryOptions();
+    renderDSTTimeline();
+    syncTimeViews();
+    renderInstruments();
+    applyFilters();
+    setInterval(syncTimeViews, 30 * 60 * 1000);
+  </script>
+</body>
+</html>
