@@ -96,20 +96,20 @@
       position: relative;
       overflow: hidden;
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr);
+      grid-template-columns: minmax(0, 1fr) minmax(340px, .58fr);
       gap: var(--space-6);
       align-items: stretch;
-      min-height: 410px;
-      padding: var(--space-8);
+      width: min(1500px, calc(100vw - 32px));
+      min-height: 650px;
+      margin-left: 50%;
+      padding: clamp(28px, 4vw, 56px);
+      transform: translateX(-50%);
       background:
-        linear-gradient(90deg, rgba(40, 103, 216, .08) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(198, 56, 36, .06) 1px, transparent 1px),
-        linear-gradient(135deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .48)),
-        rgba(255, 255, 255, .62);
-      background-size: 48px 48px;
-      border: 1px solid rgba(217, 214, 206, .76);
+        radial-gradient(circle at 76% 50%, rgba(107, 150, 255, .14), transparent 38%),
+        linear-gradient(135deg, rgba(255, 255, 255, .92) 0%, rgba(244, 241, 232, .84) 54%, rgba(235, 231, 221, .76) 100%);
+      border: 1px solid rgba(217, 214, 206, .82);
       border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 36px 90px rgba(17, 19, 24, .16);
       color: var(--ink);
       backdrop-filter: blur(18px) saturate(1.2);
       -webkit-backdrop-filter: blur(18px) saturate(1.2);
@@ -118,17 +118,13 @@
     header::before {
       content: "";
       position: absolute;
-      inset: -34% -18%;
+      inset: 0;
       z-index: 0;
       background:
-        radial-gradient(circle at 14% 52%, rgba(240, 90, 67, .38), transparent 30%),
-        radial-gradient(circle at 44% 28%, rgba(107, 150, 255, .42), transparent 34%),
-        radial-gradient(circle at 78% 64%, rgba(155, 121, 239, .34), transparent 31%),
-        linear-gradient(115deg, rgba(240, 90, 67, .14), rgba(107, 150, 255, .18), rgba(217, 145, 43, .12));
-      filter: blur(20px);
-      opacity: 1;
-      transform: translate3d(-8%, 0, 0) scale(1.08);
-      animation: auroraSlide 4.2s ease-in-out infinite alternate;
+        linear-gradient(90deg, rgba(40, 103, 216, .08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(17, 19, 24, .045) 1px, transparent 1px);
+      background-size: 54px 54px;
+      opacity: .62;
       pointer-events: none;
     }
 
@@ -136,7 +132,7 @@
       content: "";
       position: absolute;
       inset: auto 0 0;
-      z-index: 1;
+      z-index: 2;
       height: 2px;
       background: linear-gradient(90deg, var(--ny), var(--eu), var(--macro), var(--cme));
       border-radius: 0 0 var(--radius-md) var(--radius-md);
@@ -148,11 +144,32 @@
       min-width: 0;
     }
 
+    .globe-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 76% 55%, rgba(40, 103, 216, .16), transparent 32%),
+        radial-gradient(circle at 20% 16%, rgba(240, 90, 67, .12), transparent 25%),
+        radial-gradient(circle at 52% 86%, rgba(155, 121, 239, .12), transparent 32%);
+    }
+
+    #globeCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: .98;
+    }
+
     .hero-copy {
       display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 22px;
+      max-width: 720px;
     }
 
     .hero-actions {
@@ -191,7 +208,7 @@
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      color: var(--muted);
+      color: color-mix(in srgb, var(--muted) 86%, var(--ink));
       font-size: 12px;
       font-weight: 800;
       letter-spacing: .18em;
@@ -206,6 +223,23 @@
       background: linear-gradient(135deg, var(--eu), var(--ny));
       box-shadow: 0 0 14px rgba(107, 150, 255, .55);
       flex: 0 0 auto;
+    }
+
+    .hero-powered {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-top: 10px;
+      padding: 7px 10px;
+      border: 1px solid color-mix(in srgb, var(--eu) 34%, var(--line));
+      background: color-mix(in srgb, var(--panel) 72%, transparent);
+      color: color-mix(in srgb, var(--ink) 74%, var(--eu));
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(14px);
     }
 
     .brand-logo {
@@ -256,7 +290,7 @@
 
     h1 {
       margin: 14px 0 10px;
-      max-width: 980px;
+      max-width: 760px;
       font-size: 62px;
       line-height: .98;
       letter-spacing: 0;
@@ -276,13 +310,23 @@
       line-height: 1.55;
     }
 
+    .hero-quote {
+      margin: 12px 0 0;
+      max-width: 640px;
+      color: color-mix(in srgb, var(--muted) 88%, var(--ink));
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
     .quick-panel {
       align-self: stretch;
       display: flex;
       flex-direction: column;
-      background: rgba(255, 255, 255, .68);
-      border: 1px solid rgba(217, 214, 206, .82);
-      box-shadow: 0 20px 45px rgba(17, 19, 24, .10);
+      align-self: center;
+      min-height: 520px;
+      background: rgba(255, 255, 255, .58);
+      border: 1px solid rgba(217, 214, 206, .86);
+      box-shadow: 0 28px 70px rgba(17, 19, 24, .14);
       padding: 18px;
       color: var(--ink);
       backdrop-filter: blur(14px);
@@ -301,8 +345,66 @@
     .day-brief {
       margin-top: 14px;
       padding: 12px;
-      background: #f6f1e7;
-      color: #0d1015;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .72), rgba(245, 242, 234, .76)),
+        var(--soft);
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    .brief-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .brief-current {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .brief-chip {
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 72%, transparent);
+      padding: 10px;
+    }
+
+    .brief-chip span,
+    .brief-block span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .brief-chip strong,
+    .brief-block strong {
+      display: block;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .brief-block {
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    .brief-block h3 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      line-height: 1.2;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .brief-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: var(--text-sm);
+      line-height: 1.5;
     }
 
     .quick-panel h2 {
@@ -324,17 +426,17 @@
     }
 
     .quick-panel .day-brief span {
-      color: rgba(13, 16, 21, .58);
+      color: var(--muted);
     }
 
     .quick-panel .day-brief p {
-      color: rgba(13, 16, 21, .66);
+      color: var(--muted);
     }
 
     .day-brief span {
       display: block;
       margin-bottom: 6px;
-      color: rgba(13, 16, 21, .58);
+      color: var(--muted);
       font-size: 12px;
       font-weight: 850;
       letter-spacing: .16em;
@@ -349,14 +451,14 @@
 
     .day-brief p {
       margin: 8px 0 0;
-      color: rgba(13, 16, 21, .66);
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.4;
     }
 
     .quick-list {
       display: grid;
-      gap: 10px;
+      gap: 14px;
       margin-top: 14px;
     }
 
@@ -365,8 +467,6 @@
       grid-template-columns: 1fr auto;
       gap: 12px;
       align-items: center;
-      border-top: 1px solid var(--line);
-      padding-top: 10px;
       color: var(--muted);
       font-size: 13px;
     }
@@ -721,10 +821,16 @@
     .section-title {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
-      padding-bottom: 14px;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 24px;
       border-bottom: 1px solid var(--line);
+    }
+
+    .section-title > div {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
     }
 
     .section-title h2 {
@@ -744,6 +850,15 @@
       color: var(--muted);
       font-size: var(--text-md);
       line-height: 1.55;
+    }
+
+    #dst-calendar .section-title {
+      margin-bottom: 32px;
+      padding-bottom: 26px;
+    }
+
+    #dst-calendar .section-title > div {
+      gap: 16px;
     }
 
     .table-wrap {
@@ -847,25 +962,32 @@
       align-items: center;
       background: #fff;
       border: 1px solid var(--line);
-      padding: 12px;
+      padding: 14px;
     }
 
     .period.current {
-      margin-top: 18px;
-      border-color: var(--line);
-      box-shadow: inset 0 -3px 0 var(--ny), var(--shadow);
+      margin-top: 30px;
+      padding: 18px 16px;
+      border: 1px solid transparent;
+      background:
+        linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(135deg, var(--eu), var(--macro), var(--ny)) border-box;
+      box-shadow: 0 18px 40px rgba(40, 103, 216, .14), var(--shadow);
     }
 
     .period.current::before {
       content: "obecnie";
       position: absolute;
-      top: -16px;
-      left: 14px;
-      color: var(--ny);
+      top: -24px;
+      left: 16px;
+      padding: 4px 9px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--eu), var(--macro), var(--ny));
       font-size: 12px;
       font-weight: 900;
       letter-spacing: .12em;
       text-transform: uppercase;
+      box-shadow: 0 10px 24px rgba(40, 103, 216, .18);
     }
 
     .period strong {
@@ -877,7 +999,7 @@
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
-      margin-top: 12px;
+      margin-top: 18px;
     }
 
     .year-select {
@@ -921,7 +1043,7 @@
 
     .axis-status {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 1px;
       margin-bottom: 10px;
       border: 1px solid var(--line);
@@ -932,6 +1054,19 @@
       min-width: 0;
       background: var(--panel);
       padding: 10px;
+    }
+
+    .axis-status .axis-marker-control {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: center;
+      min-height: 54px;
+    }
+
+    .axis-status .axis-marker-control span {
+      margin-bottom: 0;
     }
 
     .axis-status span {
@@ -953,13 +1088,29 @@
     .axis-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+      gap: 14px;
+      align-items: flex-start;
       margin-bottom: 10px;
       border: 1px solid var(--line);
       background: var(--panel);
       padding: 12px;
       box-shadow: var(--shadow);
+    }
+
+    .axis-control-group {
+      display: grid;
+      gap: 8px;
+      min-width: min(100%, 230px);
+    }
+
+    .axis-zone-select {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      padding: 10px 12px;
+      font: inherit;
+      font-weight: 750;
     }
 
     .axis-controls .market-note {
@@ -983,6 +1134,203 @@
       height: 16px;
       margin: 0;
       accent-color: var(--ny);
+    }
+
+    .official-maps {
+      display: grid;
+      gap: 14px;
+      margin: 12px 0 4px;
+    }
+
+    .official-maps:empty {
+      display: none;
+    }
+
+    .market-map {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .market-map-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 88%, var(--soft));
+    }
+
+    .market-map-head h3 {
+      margin: 0;
+      font-size: var(--h3);
+      line-height: 1.25;
+    }
+
+    .market-map-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: var(--text-sm);
+      line-height: 1.45;
+    }
+
+    .market-clock {
+      color: var(--muted);
+      font-size: var(--text-sm);
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .market-map-body {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      padding: 14px 16px 16px;
+      overflow-x: auto;
+    }
+
+    .market-now-line {
+      position: absolute;
+      top: 52px;
+      bottom: 138px;
+      left: calc(16px + 130px + ((100% - 32px - 130px) * var(--now-ratio)));
+      z-index: 6;
+      width: 2px;
+      background: var(--ny);
+      box-shadow: 0 0 0 1px rgba(240, 90, 67, .18), 0 0 16px rgba(240, 90, 67, .32);
+      pointer-events: none;
+    }
+
+    .market-now-line.is-hidden {
+      display: none;
+    }
+
+    .market-now-line::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -5px;
+      width: 8px;
+      height: 8px;
+      background: var(--ny);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .market-ruler,
+    .market-row {
+      min-width: 760px;
+    }
+
+    .market-ruler {
+      display: grid;
+      grid-template-columns: 130px repeat(24, minmax(22px, 1fr));
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .market-ruler span {
+      text-align: center;
+    }
+
+    .market-row {
+      display: grid;
+      grid-template-columns: 130px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .market-name {
+      color: var(--ink);
+      font-size: var(--text-sm);
+      font-weight: 850;
+    }
+
+    .market-track {
+      position: relative;
+      min-height: 34px;
+      border: 1px solid var(--line);
+      background:
+        repeating-linear-gradient(90deg, transparent 0, transparent calc((100% / 24) - 1px), rgba(120, 120, 120, .22) calc((100% / 24) - 1px), rgba(120, 120, 120, .22) calc(100% / 24)),
+        linear-gradient(135deg, color-mix(in srgb, var(--soft) 78%, transparent), color-mix(in srgb, var(--panel) 80%, transparent));
+      overflow: hidden;
+    }
+
+    .market-track::before {
+      content: attr(data-region);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: color-mix(in srgb, var(--muted) 38%, transparent);
+      font-size: 20px;
+      font-weight: 850;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .market-track .axis-bar {
+      top: 6px;
+      min-height: 22px;
+      z-index: 2;
+    }
+
+    .market-track .axis-bar.tiny,
+    .market-track .axis-bar.compact {
+      min-width: 14px;
+    }
+
+    .market-foot {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, .9fr);
+      gap: 16px;
+      padding-top: 4px;
+    }
+
+    .market-legend,
+    .market-overlaps {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .market-legend {
+      display: grid;
+      gap: 8px;
+    }
+
+    .legend-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: var(--text-sm);
+      font-weight: 750;
+    }
+
+    .legend-swatch {
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(255, 255, 255, .42);
+      background: var(--swatch);
+    }
+
+    .market-overlaps h4 {
+      margin: 0 0 8px;
+      font-size: var(--text-sm);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+
+    .market-overlaps p {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: var(--text-sm);
+      line-height: 1.45;
     }
 
     .axis-row {
@@ -1032,6 +1380,11 @@
       white-space: nowrap;
       cursor: pointer;
       z-index: 1;
+      border-left: 1px solid rgba(255, 255, 255, .72);
+      border-right: 1px solid rgba(0, 0, 0, .24);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .14),
+        0 0 0 1px rgba(0, 0, 0, .08);
     }
 
     .axis-bar.compact,
@@ -1042,6 +1395,19 @@
     .axis-bar.tiny {
       padding: 0;
       min-width: 8px;
+    }
+
+    .axis-bar.axis-point {
+      width: 14px;
+      min-width: 14px;
+      padding: 0;
+      transform: translateX(-50%);
+      color: transparent;
+      border-left-color: rgba(255, 255, 255, .88);
+      border-right-color: rgba(0, 0, 0, .28);
+      box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, .18),
+        0 0 0 1px rgba(0, 0, 0, .14);
     }
 
     .axis-bar:hover {
@@ -1262,17 +1628,94 @@
     .library-tools {
       display: grid;
       grid-template-columns: minmax(220px, .8fr) minmax(180px, .55fr) minmax(240px, .8fr);
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: end;
+    }
+
+    .library-tools > div {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .combo-field {
+      position: relative;
+      min-width: 0;
+    }
+
+    .combo {
+      position: relative;
+      min-width: 0;
+    }
+
+    .combo-list {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 35;
+      display: none;
+      max-height: 280px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .combo-list.is-open {
+      display: grid;
+    }
+
+    .combo-option {
+      display: grid;
+      gap: 4px;
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      padding: 11px 12px;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .combo-option:hover,
+    .combo-option.is-active {
+      background: color-mix(in srgb, var(--eu) 12%, var(--panel));
+    }
+
+    .combo-option strong {
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .combo-option span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
     }
 
     .library-tools select {
       width: 100%;
-      min-height: 40px;
+      min-height: 44px;
       border: 1px solid var(--line);
       background: #fff;
       color: var(--ink);
-      padding: 8px 10px;
+      padding: 10px 12px;
       font: inherit;
     }
 
@@ -1534,7 +1977,7 @@
     }
 
     .quick-panel {
-      gap: 16px;
+      gap: 14px;
     }
 
     .day-brief {
@@ -1543,13 +1986,13 @@
     }
 
     .quick-list {
-      gap: 0;
+      gap: 14px;
       margin-top: 0;
     }
 
     .quick-item {
-      min-height: 48px;
-      padding: 12px 0;
+      min-height: 28px;
+      padding: 4px 0;
     }
 
     .grid-two {
@@ -1558,13 +2001,17 @@
     }
 
     section {
-      margin-top: 48px;
+      margin-top: 56px;
     }
 
     .section-title {
-      gap: 7px;
-      margin-bottom: 20px;
-      padding-bottom: 14px;
+      gap: 16px;
+      margin-bottom: 30px;
+      padding-bottom: 24px;
+    }
+
+    .section-title > div {
+      gap: 14px;
     }
 
     .section-title h2 {
@@ -1580,7 +2027,7 @@
 
     .info-band h2,
     .note h2 {
-      margin-bottom: 10px;
+      margin-bottom: 14px;
       font-size: 19px;
       line-height: 1.2;
     }
@@ -1671,6 +2118,8 @@
     [data-theme="dark"] .current-panel,
     [data-theme="dark"] .page-menu a,
     [data-theme="dark"] .page-menu button,
+    [data-theme="dark"] .combo-list,
+    [data-theme="dark"] .combo-option,
     [data-theme="dark"] .pill,
     [data-theme="dark"] .search,
     [data-theme="dark"] .year-select {
@@ -1681,6 +2130,22 @@
 
     [data-theme="dark"] .info-band p {
       color: var(--muted);
+    }
+
+    [data-theme="dark"] .period.current {
+      border-color: transparent;
+      background:
+        linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(135deg, #6b96ff, #9b79ef 58%, #f05a43) border-box;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .24), 0 0 32px rgba(107, 150, 255, .10);
+    }
+
+    [data-theme="dark"] .day-brief {
+      background:
+        linear-gradient(135deg, rgba(32, 33, 38, .88), rgba(22, 23, 25, .92)),
+        var(--soft);
+      border-color: var(--line);
+      color: var(--ink);
     }
 
     [data-theme="dark"] .page-menu a:hover,
@@ -1742,11 +2207,26 @@
 
     [data-theme="dark"] header {
       background:
+        radial-gradient(circle at 76% 50%, rgba(107, 150, 255, .18), transparent 38%),
+        linear-gradient(135deg, #050608 0%, #101116 62%, #07080a 100%);
+      border-color: rgba(244, 241, 232, .12);
+      box-shadow: 0 36px 90px rgba(0, 0, 0, .42);
+      color: #f4f1e8;
+    }
+
+    [data-theme="dark"] header::before {
+      background:
         linear-gradient(90deg, rgba(107, 150, 255, .09) 1px, transparent 1px),
         linear-gradient(180deg, rgba(240, 90, 67, .07) 1px, transparent 1px),
-        linear-gradient(135deg, rgba(22, 23, 25, .86), rgba(22, 23, 25, .58)),
-        rgba(22, 23, 25, .72);
-      border-color: rgba(61, 58, 51, .74);
+        transparent;
+      background-size: 54px 54px;
+    }
+
+    [data-theme="dark"] .globe-layer {
+      background:
+        radial-gradient(circle at 76% 55%, rgba(255, 255, 255, .08), transparent 28%),
+        radial-gradient(circle at 20% 16%, rgba(240, 90, 67, .14), transparent 25%),
+        radial-gradient(circle at 52% 86%, rgba(107, 150, 255, .12), transparent 32%);
     }
 
     [data-theme="dark"] .quick-panel {
@@ -1755,11 +2235,30 @@
       color: var(--ink);
     }
 
+    [data-theme="dark"] .hero-powered {
+      background: rgba(244, 241, 232, .06);
+      border-color: rgba(107, 150, 255, .32);
+      color: color-mix(in srgb, var(--ink) 82%, var(--eu));
+      box-shadow: 0 14px 32px rgba(0, 0, 0, .18);
+    }
+
+    [data-theme="dark"] .eyebrow {
+      color: rgba(244, 241, 232, .66);
+    }
+
     [data-theme="dark"] h1 {
       color: transparent;
       background: linear-gradient(92deg, #f4f1e8 0%, #6b96ff 48%, #f05a43 100%);
       -webkit-background-clip: text;
       background-clip: text;
+    }
+
+    [data-theme="dark"] .lede {
+      color: rgba(244, 241, 232, .78);
+    }
+
+    [data-theme="dark"] .hero-quote {
+      color: rgba(244, 241, 232, .66);
     }
 
     [data-theme="dark"] .quick-panel h2 {
@@ -1786,11 +2285,6 @@
       background: var(--ink);
       color: var(--panel);
       border-color: var(--ink);
-    }
-
-    [data-theme="dark"] .day-brief {
-      background: #f6f1e7;
-      color: #0d1015;
     }
 
     [data-theme="dark"] th {
@@ -1888,6 +2382,14 @@
         gap: 4px;
       }
 
+      .brief-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .brief-current {
+        grid-template-columns: 1fr;
+      }
+
       .quick-item strong {
         white-space: normal;
         overflow-wrap: anywhere;
@@ -1919,8 +2421,13 @@
       }
 
       .section-title {
-        margin-bottom: 12px;
-        padding-bottom: 12px;
+        gap: 12px;
+        margin-bottom: 22px;
+        padding-bottom: 18px;
+      }
+
+      .section-title > div {
+        gap: 11px;
       }
 
       .section-title h2 {
@@ -1929,6 +2436,7 @@
 
       .section-title p {
         font-size: 14px;
+        line-height: 1.6;
       }
 
       header {
@@ -2016,8 +2524,34 @@
         top: 100px;
       }
 
+      #session-axis {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #session-axis .section-title {
+        order: 0;
+      }
+
+      #session-axis .axis-status {
+        order: 1;
+      }
+
+      #session-axis .axis-controls {
+        order: 2;
+      }
+
+      #session-axis .axis-details {
+        order: 3;
+      }
+
+      #session-axis .time-axis {
+        order: 4;
+      }
+
       .axis-controls {
         align-items: stretch;
+        margin-top: 0;
       }
 
       .axis-controls .pill-group {
@@ -2026,6 +2560,32 @@
       }
 
       .axis-status {
+        grid-template-columns: 1fr;
+      }
+
+      .market-map-head,
+      .market-map-body {
+        padding: 12px;
+      }
+
+      .market-ruler,
+      .market-row {
+        min-width: 640px;
+      }
+
+      .market-ruler {
+        grid-template-columns: 118px repeat(24, minmax(20px, 1fr));
+      }
+
+      .market-row {
+        grid-template-columns: 118px minmax(0, 1fr);
+      }
+
+      .market-now-line {
+        left: calc(12px + 118px + ((640px - 118px) * var(--now-ratio)));
+      }
+
+      .market-foot {
         grid-template-columns: 1fr;
       }
 
@@ -2124,7 +2684,23 @@
       }
 
       header {
+        min-height: 620px;
+        width: 100%;
+        margin-left: 0;
         padding: 16px;
+        transform: none;
+      }
+
+      .globe-layer {
+        inset: auto -28% 0 -12%;
+        height: 64%;
+        opacity: .82;
+      }
+
+      .hero-copy {
+        min-height: 330px;
+        justify-content: flex-start;
+        padding-top: 16px;
       }
 
       .hero-aurora {
@@ -2172,14 +2748,19 @@
   </a>
   <main class="shell">
     <header>
+      <div class="globe-layer" aria-hidden="true">
+        <canvas id="globeCanvas"></canvas>
+      </div>
       <div class="hero-copy">
         <div>
-          <div class="eyebrow">XPREAY reference table</div>
-          <h1>Trading hours. Sesje, makra, futures.</h1>
+          <div class="eyebrow">Made by XPREAY</div>
+          <div class="hero-powered">Powered by ICT Concepts</div>
+          <h1>Sesje handlowe / SMC.</h1>
           <p class="lede">
-            Jedna mapa czasu dla rynku: sesje, makra, futures i zmiana czasu
-            przeliczone między NY, Polską, Londynem i Tokyo.
+            Uniwersalne narzędzie do śledzenia najważniejszych sesji handlowych
+            w połączeniu z konceptami SMC.
           </p>
+          <p class="hero-quote"><em>Wystaw się na największe prawdopodobieństwo aktywności smart money.</em></p>
         </div>
         <div class="hero-actions">
           <a class="hero-link primary" href="#time-library">Przejdź do biblioteki</a>
@@ -2192,13 +2773,28 @@
         <div class="day-brief">
           <span id="briefStatus">Obecnie</span>
           <strong id="briefRelation">PL = NY + 6h</strong>
-          <p id="briefUtc">NY UTC-4 / PL UTC+2</p>
+        </div>
+        <div class="brief-grid" aria-label="Aktualne strefy UTC">
+          <div class="brief-chip"><span>New York</span><strong id="briefNyUtc">UTC-4</strong></div>
+          <div class="brief-chip"><span>Polska</span><strong id="briefPlUtc">UTC+2</strong></div>
+          <div class="brief-chip"><span>London</span><strong id="briefLondonUtc">UTC+1</strong></div>
+          <div class="brief-chip"><span>Tokyo</span><strong id="briefTokyoUtc">UTC+9</strong></div>
+        </div>
+        <div class="brief-grid brief-current" aria-label="Aktualne okna rynku">
+          <div class="brief-chip"><span>Teraz SMC / ICT</span><strong id="briefSmcNow">Sprawdzam...</strong></div>
+          <div class="brief-chip"><span>Teraz oficjalnie</span><strong id="briefOfficialNow">Sprawdzam...</strong></div>
         </div>
         <div class="quick-list">
-          <div class="quick-item"><span>London Open</span><strong id="briefLondonOpen">03:00 NY / 09:00 PL</strong></div>
-          <div class="quick-item"><span>Tokyo Open</span><strong id="briefTokyoOpen">20:00 NY / 02:00 PL</strong></div>
-          <div class="quick-item"><span>NY data</span><strong id="briefNyData">08:30 NY / 14:30 PL</strong></div>
-          <div class="quick-item"><span>US cash open</span><strong id="briefCashOpen">09:30 NY / 15:30 PL</strong></div>
+          <div class="brief-block">
+            <h3>Otwarcia według giełd</h3>
+            <div class="quick-item"><span>London 08:00 London time</span><strong id="briefLondonOpen">03:00 NY / 09:00 PL</strong></div>
+            <div class="quick-item"><span>Tokyo 09:00 JST</span><strong id="briefTokyoOpen">20:00 NY / 02:00 PL</strong></div>
+          </div>
+          <div class="brief-block">
+            <h3>Stałe punkty NY</h3>
+            <div class="quick-item"><span>USA data</span><strong id="briefNyData">08:30 NY / 14:30 PL</strong></div>
+            <div class="quick-item"><span>US cash open</span><strong id="briefCashOpen">09:30 NY / 15:30 PL</strong></div>
+          </div>
         </div>
       </aside>
     </header>
@@ -2220,35 +2816,11 @@
       </div>
     </nav>
 
-    <div class="grid-two">
-      <section class="info-band" id="transition-explained">
-        <h2>Czego dotyczy okres przejściowy?</h2>
-        <p>
-          Okres przejściowy dotyczy relacji czasu między USA/NY a Europą, UK i Polską.
-          USA zmienia czas w innym terminie niż Europa. Przez kilka lub kilkanaście dni
-          różnica między Polską a New Yorkiem wynosi 5 godzin zamiast typowych 6 godzin.
-        </p>
-      </section>
-
-      <section class="note">
-        <h2>Jak to czytać?</h2>
-        <ul>
-          <li>Okna liczone według NY zostają w NY bez zmian; zmienia się ich godzina w Polsce.</li>
-          <li>Okna liczone według Londynu/Europy zostają lokalnie bez zmian; na wykresie NY przesuwają się o godzinę później.</li>
-          <li>London Open nie jest na sztywno 03:00 NY. Prawidłowy punkt odniesienia to 08:00 London.</li>
-        </ul>
-      </section>
-    </div>
-
     <section id="dst-calendar" data-section="moments">
       <div class="section-title">
         <div>
           <h2>Kalendarz zmiany czasu</h2>
-          <p>Daty pokazują, kiedy zmienia się relacja NY ↔ Polska/London. Wybierz rok, żeby zobaczyć dokładne okresy przejściowe dla aktualnych reguł USA i Europy.</p>
-          <div class="year-tools">
-            <span class="control-label">Rok</span>
-            <select class="year-select" id="yearSelect" aria-label="Wybierz rok"></select>
-          </div>
+          <p>Daty pokazują, kiedy w bieżącym roku zmienia się relacja NY ↔ Polska/London. Kalendarz automatycznie używa aktualnego roku i aktualnych reguł zmiany czasu USA oraz Europy.</p>
         </div>
       </div>
       <div class="timeline" id="dstTimeline"></div>
@@ -2262,13 +2834,32 @@
         </div>
       </div>
       <div class="axis-controls" aria-label="Ustawienia osi czasu">
-        <span class="control-label">Rynek na osi</span>
-        <div class="pill-group" data-filter-group="axis-market">
-          <button class="pill" type="button" data-market="all" aria-pressed="true">Wszystko</button>
-          <button class="pill" type="button" data-market="indices" aria-pressed="false">Indeksy</button>
-          <button class="pill" type="button" data-market="futures" aria-pressed="false">Forex / FX futures</button>
+        <div class="axis-control-group">
+          <span class="control-label">Widok osi</span>
+          <div class="pill-group" data-filter-group="axis-mode">
+            <button class="pill" type="button" data-axis-mode="smc" aria-pressed="true">SMC / ICT</button>
+            <button class="pill" type="button" data-axis-mode="official" aria-pressed="false">Oficjalne sesje</button>
+          </div>
         </div>
-        <p class="market-note">Ten wybór zmienia tylko interaktywną oś sesji. Biblioteka niżej ma osobny filtr instrumentu.</p>
+        <div class="axis-control-group">
+          <span class="control-label">Rynek na osi</span>
+        <div class="pill-group" data-filter-group="axis-market">
+          <button class="pill" type="button" data-axis-market="all" aria-pressed="true">Wszystko</button>
+          <button class="pill" type="button" data-axis-market="indices" aria-pressed="false">Indeksy</button>
+          <button class="pill" type="button" data-axis-market="futures" aria-pressed="false">Forex / FX futures</button>
+        </div>
+        </div>
+        <div class="axis-control-group">
+          <span class="control-label">Strefa osi</span>
+          <select class="axis-zone-select" id="axisZone" aria-label="Wybierz strefę czasową osi">
+            <option value="ny">New York / NY</option>
+            <option value="pl">Polska / Warsaw</option>
+            <option value="london">London</option>
+            <option value="tokyo">Tokyo / JST</option>
+            <option value="utc">UTC</option>
+          </select>
+        </div>
+        <p class="market-note">Oś rysuje wszystkie bloki w wybranej strefie czasowej. NY zostaje punktem odniesienia w szczegółach, a oficjalne sesje są liczone z lokalnych stref: Sydney, Tokyo, London, Frankfurt i New York. Biblioteka instrumentów poniżej działa osobno.</p>
       </div>
       <div class="axis-details" id="axisDetails" aria-hidden="true">
         <span class="control-label">Szczegóły osi</span>
@@ -2276,6 +2867,7 @@
         <p>Tu pojawi się pełna nazwa, rozwinięcie skrótu oraz opis wybranego okna.</p>
       </div>
       <div class="axis-status" id="axisStatus" aria-label="Aktualna parametryzacja osi"></div>
+      <div class="official-maps" id="officialSessionMaps" aria-live="polite"></div>
       <div class="time-axis" id="timeAxis"></div>
     </section>
 
@@ -2288,9 +2880,13 @@
       </div>
       <div class="library-shell">
         <div class="library-tools">
-          <div>
+          <div class="combo-field">
             <span class="control-label">Instrument</span>
-            <select id="libraryInstrument" aria-label="Wybierz instrument"></select>
+            <div class="combo">
+              <input class="search" id="libraryInstrumentSearch" type="search" autocomplete="off" placeholder="Wpisz np. Nasdaq, NQ, EURUSD, DAX, gold..." aria-label="Wybierz instrument" aria-controls="libraryInstrumentSuggestions" aria-expanded="false" />
+              <div class="combo-list" id="libraryInstrumentSuggestions" role="listbox"></div>
+            </div>
+            <select class="sr-only" id="libraryInstrument" aria-label="Wybierz instrument"></select>
           </div>
           <div>
             <span class="control-label">Czas bazowy</span>
@@ -2928,10 +3524,11 @@
 
   <script>
     const sectionButtons = document.querySelectorAll('[data-filter]');
-    const marketButtons = document.querySelectorAll('button[data-market]');
+    const axisMarketButtons = document.querySelectorAll('[data-filter-group="axis-market"] button[data-axis-market]');
+    const axisModeButtons = document.querySelectorAll('button[data-axis-mode]');
+    const axisZone = document.querySelector('#axisZone');
     const sections = document.querySelectorAll('[data-section]');
     const search = document.querySelector('#search');
-    const yearSelect = document.querySelector('#yearSelect');
     const dstTimeline = document.querySelector('#dstTimeline');
     const timeAxis = document.querySelector('#timeAxis');
     const themeToggle = document.querySelector('#themeToggle');
@@ -2941,6 +3538,8 @@
     const themeText = themeToggle.querySelector('.theme-text');
     const instrumentSearch = document.querySelector('#instrumentSearch');
     const instrumentResults = document.querySelector('#instrumentResults');
+    const libraryInstrumentSearch = document.querySelector('#libraryInstrumentSearch');
+    const libraryInstrumentSuggestions = document.querySelector('#libraryInstrumentSuggestions');
     const libraryInstrument = document.querySelector('#libraryInstrument');
     const libraryClock = document.querySelector('#libraryClock');
     const librarySummary = document.querySelector('#librarySummary');
@@ -2948,21 +3547,30 @@
     const libraryTabButtons = document.querySelectorAll('[data-library-tab]');
     const axisDetails = document.querySelector('#axisDetails');
     const axisStatus = document.querySelector('#axisStatus');
+    const officialSessionMaps = document.querySelector('#officialSessionMaps');
     const briefStatus = document.querySelector('#briefStatus');
     const briefRelation = document.querySelector('#briefRelation');
-    const briefUtc = document.querySelector('#briefUtc');
+    const briefNyUtc = document.querySelector('#briefNyUtc');
+    const briefPlUtc = document.querySelector('#briefPlUtc');
+    const briefLondonUtc = document.querySelector('#briefLondonUtc');
+    const briefTokyoUtc = document.querySelector('#briefTokyoUtc');
+    const briefSmcNow = document.querySelector('#briefSmcNow');
+    const briefOfficialNow = document.querySelector('#briefOfficialNow');
     const briefLondonOpen = document.querySelector('#briefLondonOpen');
     const briefTokyoOpen = document.querySelector('#briefTokyoOpen');
     const briefNyData = document.querySelector('#briefNyData');
     const briefCashOpen = document.querySelector('#briefCashOpen');
+    const globeCanvas = document.querySelector('#globeCanvas');
 
     let activeSection = 'all';
     let activeMarket = 'all';
+    let activeAxisMarket = 'all';
+    let activeAxisMode = 'smc';
+    let activeAxisZone = 'ny';
     let activeLibraryTab = 'recommended';
     let activeLibraryInstrument = 'all';
     let activeLibraryClock = 'all';
     let selectedDate = new Date();
-    let selectedYear = selectedDate.getFullYear();
 
     const months = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
 
@@ -2992,12 +3600,12 @@
       { id: 'sp500', label: 'S&P 500 / ES / MES / SPY', market: 'indices', focus: ['us-index', 'indices', 'ny', 'cash', 'data', 'macro', 'silver', 'bond', 'cme-index'], summary: 'Najważniejsze dla ES/SPX: cash open 09:30, dane USA, open range, NY AM/PM, makra i końcówka cash session.' },
       { id: 'dow-russell', label: 'Dow / YM / Russell / RTY', market: 'indices', focus: ['us-index', 'indices', 'ny', 'cash', 'data', 'macro', 'silver', 'bond', 'cme-index'], summary: 'Logika podobna do indeksów USA: 09:30 cash open, AM/PM, dane i makra NY.' },
       { id: 'dax', label: 'DAX / GER40 / FDAX', market: 'indices', focus: ['europe-index', 'europe', 'official-eu', 'london', 'fix', 'data', 'macro'], summary: 'Dla DAX/GER40 najpierw patrz na Frankfurt/Xetra i Europę, dopiero później na wpływ danych USA i risk flow z NY.' },
-      { id: 'eurusd', label: 'EURUSD / 6E', market: 'futures', focus: ['fx', 'forex', 'europe', 'london', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'ny-cut', 'cbdr'], summary: 'Dla EURUSD/6E kluczowe są London, NY Open, dane USA, NY Cut, makra, CME FX RTH i CBDR/Flout.' },
-      { id: 'gbpusd', label: 'GBPUSD / 6B', market: 'futures', focus: ['fx', 'forex', 'europe', 'london', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'ny-cut', 'cbdr'], summary: 'Dla GBPUSD mocno pilnuj London Open/Fix oraz okresów przejściowych NY ↔ London.' },
-      { id: 'usdjpy', label: 'USDJPY / 6J', market: 'futures', focus: ['fx', 'forex', 'tokyo', 'asia', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'cbdr'], summary: 'Dla JPY dodaj Tokyo/Asian Killzone, bo Japonia nie zmienia czasu i start Azji przesuwa się względem NY.' },
+      { id: 'eurusd', label: 'EURUSD / 6E', market: 'futures', focus: ['fx', 'forex', 'europe', 'london', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'ny-cut', 'cbdr', 'asr'], summary: 'Dla EURUSD/6E kluczowe są London, NY Open, dane USA, NY Cut, makra, CME FX RTH, CBDR/Flout i ASR.' },
+      { id: 'gbpusd', label: 'GBPUSD / 6B', market: 'futures', focus: ['fx', 'forex', 'europe', 'london', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'ny-cut', 'cbdr', 'asr'], summary: 'Dla GBPUSD mocno pilnuj London Open/Fix, ASR oraz okresów przejściowych NY ↔ London.' },
+      { id: 'usdjpy', label: 'USDJPY / 6J', market: 'futures', focus: ['fx', 'forex', 'tokyo', 'asia', 'ny', 'data', 'macro', 'silver', 'cme-fx', 'cbdr', 'asr'], summary: 'Dla JPY dodaj Tokyo/Asian Killzone oraz stały ASR 19:00-00:00 NY. Japonia nie zmienia czasu, więc Tokyo przesuwa się względem NY.' },
       { id: 'gold', label: 'Gold / XAUUSD / GC', market: 'all', focus: ['metal', 'commodity', 'ny', 'data', 'macro', 'london', 'bond', 'cash', 'cme-index'], summary: 'Dla złota ważne są London, dane USA, yields/bond close, NY AM/PM oraz makra. Feed spot/CFD i GC mogą mieć inne przerwy.' },
       { id: 'oil', label: 'WTI / CL / USOIL', market: 'all', focus: ['energy', 'commodity', 'ny', 'data', 'macro', 'cme-energy'], summary: 'Dla ropy najważniejsze są NY AM, dane USA, specyficzne publikacje energy i settlement/koniec sesji kontraktu.' },
-      { id: 'cme-fx', label: 'CME FX futures / 6E 6B 6J', market: 'futures', focus: ['fx', 'forex', 'cme-fx', 'ny', 'data', 'macro', 'silver'], summary: 'Profil pod kontrakty FX futures: CME RTH 08:20, przerwa 17:00-18:00, Globex reopen, dane i okna NY.' }
+      { id: 'cme-fx', label: 'CME FX futures / 6E 6B 6J', market: 'futures', focus: ['fx', 'forex', 'cme-fx', 'ny', 'data', 'macro', 'silver', 'asr'], summary: 'Profil pod kontrakty FX futures: CME RTH 08:20, przerwa 17:00-18:00, Globex reopen, dane, okna NY i ASR.' }
     ];
 
     function setPressed(buttons, attr, value) {
@@ -3048,6 +3656,7 @@
     }
 
     function renderDSTTimeline() {
+      const selectedYear = selectedDate.getFullYear();
       const usStart = nthWeekday(selectedYear, 2, 0, 2);
       const euStart = lastWeekday(selectedYear, 2, 0);
       const euEnd = lastWeekday(selectedYear, 9, 0);
@@ -3133,32 +3742,382 @@
       return `UTC${offset >= 0 ? '+' : ''}${offset}`;
     }
 
+    function axisZoneLabel() {
+      return {
+        ny: 'NY',
+        pl: 'PL',
+        london: 'London',
+        tokyo: 'JST',
+        utc: 'UTC'
+      }[activeAxisZone] || 'NY';
+    }
+
+    function axisZoneName() {
+      return {
+        ny: 'New York / NY',
+        pl: 'Polska / Warsaw',
+        london: 'London',
+        tokyo: 'Tokyo / JST',
+        utc: 'UTC'
+      }[activeAxisZone] || 'New York / NY';
+    }
+
+    function axisZoneOffset(cfg) {
+      return {
+        ny: 0,
+        pl: cfg.isTransition ? 5 : 6,
+        london: cfg.londonUtc - cfg.nyUtc,
+        tokyo: cfg.tokyoUtc - cfg.nyUtc,
+        utc: -cfg.nyUtc
+      }[activeAxisZone] || 0;
+    }
+
+    function zoneParts(date, timeZone) {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).formatToParts(date).reduce((acc, part) => {
+        acc[part.type] = part.value;
+        return acc;
+      }, {});
+
+      return {
+        year: Number(parts.year),
+        month: Number(parts.month),
+        day: Number(parts.day),
+        hour: Number(parts.hour) % 24,
+        minute: Number(parts.minute)
+      };
+    }
+
+    function timeZoneOffsetMinutes(timeZone, date) {
+      const parts = zoneParts(date, timeZone);
+      const localAsUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute);
+      return (localAsUtc - date.getTime()) / 60000;
+    }
+
+    function localSessionHourToNy(date, timeZone, hour) {
+      const wholeHour = Math.floor(hour);
+      const minute = Math.round((hour - wholeHour) * 60);
+      const localAsUtc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), wholeHour, minute);
+      let offset = timeZoneOffsetMinutes(timeZone, new Date(localAsUtc));
+      let utcMs = localAsUtc - offset * 60000;
+      offset = timeZoneOffsetMinutes(timeZone, new Date(utcMs));
+      utcMs = localAsUtc - offset * 60000;
+      const ny = zoneParts(new Date(utcMs), 'America/New_York');
+      return ny.hour + ny.minute / 60;
+    }
+
+    function localSessionRangeToNy(date, timeZone, start, end) {
+      return {
+        start: localSessionHourToNy(date, timeZone, start),
+        end: localSessionHourToNy(date, timeZone, end)
+      };
+    }
+
+    function normalizedRange(start, end) {
+      return { start, end: end <= start ? end + 24 : end };
+    }
+
+    function containsHour(hour, start, end) {
+      const range = normalizedRange(start, end);
+      const candidates = [hour, hour + 24];
+      return candidates.some((value) => value >= range.start && value < range.end);
+    }
+
+    function nextWindowLabel(hour, windows) {
+      const next = windows
+        .map((item) => {
+          const start = item.start <= hour ? item.start + 24 : item.start;
+          return { ...item, nextStart: start };
+        })
+        .sort((a, b) => a.nextStart - b.nextStart)[0];
+      return next ? `Następne: ${next.label} ${asTime(next.start)} NY` : 'Brak aktywnego okna';
+    }
+
+    function currentWindowLabel(hour, windows) {
+      const active = windows.filter((item) => containsHour(hour, item.start, item.end));
+      if (active.length) return active.map((item) => item.label).join(' + ');
+      return nextWindowLabel(hour, windows);
+    }
+
+    function currentSmcWindow(cfg, hour) {
+      const windows = [
+        { label: 'London KZ', start: cfg.londonOpenNy - 2, end: cfg.londonOpenNy + 2 },
+        { label: 'NY Open KZ', start: 7, end: 10 },
+        { label: 'NY AM', start: 8.5, end: 11 },
+        { label: 'NY Lunch', start: 12, end: 13.5 },
+        { label: 'NY PM', start: 13, end: 16 },
+        { label: 'CBDR', start: 14, end: 20 },
+        { label: 'ASR', start: 19, end: 24 },
+        { label: 'Asian Killzone', start: cfg.tokyoOpenNy, end: cfg.tokyoOpenNy + 4 }
+      ];
+      return currentWindowLabel(hour, windows);
+    }
+
+    function currentOfficialSession(hour) {
+      const data = officialSessionData();
+      const sessions = [...data.fx, ...data.stocks];
+      const active = sessions
+        .filter((session) => session.segments.some((segment) => containsHour(hour, segment.start, segment.end)))
+        .map((session) => session.display);
+      if (active.length) return active.slice(0, 3).join(' + ');
+
+      const windows = sessions.flatMap((session) => session.segments.map((segment) => ({
+        label: session.display,
+        start: segment.start,
+        end: segment.end
+      })));
+      return nextWindowLabel(hour, windows);
+    }
+
     function renderDayBrief() {
       const cfg = classifyDate(selectedDate);
+      const hour = currentNyHour(cfg);
       briefStatus.textContent = `Obecnie: ${cfg.status}`;
       briefRelation.textContent = cfg.relation;
-      briefUtc.textContent = `NY ${utcLabel(cfg.nyUtc)} / PL ${utcLabel(cfg.plUtc)} / London ${utcLabel(cfg.londonUtc)}`;
+      briefNyUtc.textContent = utcLabel(cfg.nyUtc);
+      briefPlUtc.textContent = utcLabel(cfg.plUtc);
+      briefLondonUtc.textContent = utcLabel(cfg.londonUtc);
+      briefTokyoUtc.textContent = utcLabel(cfg.tokyoUtc);
+      briefSmcNow.textContent = currentSmcWindow(cfg, hour);
+      briefOfficialNow.textContent = currentOfficialSession(hour);
       briefLondonOpen.textContent = `${asTime(cfg.londonOpenNy)} NY / 09:00 PL`;
       briefTokyoOpen.textContent = `${asTime(cfg.tokyoOpenNy)} NY / ${cfg.tokyoOpenPl}`;
       briefNyData.textContent = `08:30 NY / ${nyToPl(8.5, cfg)} PL`;
       briefCashOpen.textContent = `09:30 NY / ${nyToPl(9.5, cfg)} PL`;
     }
 
+    function initHeroGlobe() {
+      if (!globeCanvas) return;
+      const ctx = globeCanvas.getContext('2d');
+      if (!ctx) return;
+
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let points = [];
+      let rafId = 0;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const cities = [
+        { name: 'NY', lat: 40.7128, lon: -74.0060, color: '#f05a43' },
+        { name: 'London', lat: 51.5074, lon: -0.1278, color: '#6b96ff' },
+        { name: 'Tokyo', lat: 35.6762, lon: 139.6503, color: '#b678f2' },
+        { name: 'Sydney', lat: -33.8688, lon: 151.2093, color: '#b678f2' }
+      ];
+
+      function isLandish(lon, lat) {
+        const zones = [
+          [-168, -52, 7, 72], [-132, -60, -56, 14], [-82, -35, -55, 13],
+          [-18, 52, -35, 36], [-12, 42, 35, 72], [42, 150, 5, 65],
+          [68, 146, -10, 30], [112, 154, -44, -10], [132, 178, -48, -34],
+          [-8, 36, 49, 61], [96, 147, 30, 49], [-52, -28, 58, 84]
+        ];
+        return zones.some(([minLon, maxLon, minLat, maxLat]) => lon >= minLon && lon <= maxLon && lat >= minLat && lat <= maxLat);
+      }
+
+      function buildPoints() {
+        points = [];
+        for (let lat = -72; lat <= 76; lat += 3.5) {
+          const density = Math.max(.32, Math.cos((lat * Math.PI) / 180));
+          for (let lon = -180; lon <= 180; lon += 3.8 / density) {
+            if (!isLandish(lon, lat)) continue;
+            const jitter = Math.sin((lon * 12.9898 + lat * 78.233) * .0174533) * .85;
+            points.push({ lon: lon + jitter, lat: lat + jitter * .35 });
+          }
+        }
+      }
+
+      function resizeGlobe() {
+        const rect = globeCanvas.getBoundingClientRect();
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = Math.max(1, Math.floor(rect.width));
+        height = Math.max(1, Math.floor(rect.height));
+        globeCanvas.width = Math.floor(width * dpr);
+        globeCanvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function project(lat, lon, rotation, radius, cx, cy) {
+        const phi = (lat * Math.PI) / 180;
+        const lambda = ((lon + rotation) * Math.PI) / 180;
+        const tilt = -18 * Math.PI / 180;
+        const cosPhi = Math.cos(phi);
+        let x = cosPhi * Math.sin(lambda);
+        let y = Math.sin(phi);
+        let z = cosPhi * Math.cos(lambda);
+        const yTilt = y * Math.cos(tilt) - z * Math.sin(tilt);
+        const zTilt = y * Math.sin(tilt) + z * Math.cos(tilt);
+        return {
+          x: cx + radius * x,
+          y: cy - radius * yTilt,
+          z: zTilt,
+          visible: zTilt > -0.08
+        };
+      }
+
+      function drawPath(coords, rotation, radius, cx, cy, stroke, alpha, widthLine = 1) {
+        ctx.beginPath();
+        let started = false;
+        coords.forEach(([lat, lon]) => {
+          const p = project(lat, lon, rotation, radius, cx, cy);
+          if (!p.visible) {
+            started = false;
+            return;
+          }
+          if (!started) {
+            ctx.moveTo(p.x, p.y);
+            started = true;
+          } else {
+            ctx.lineTo(p.x, p.y);
+          }
+        });
+        ctx.strokeStyle = stroke.replace('ALPHA', alpha);
+        ctx.lineWidth = widthLine;
+        ctx.stroke();
+      }
+
+      function drawGlobeFrame(rotation, radius, cx, cy) {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const line = dark ? 'rgba(244,241,232,ALPHA)' : 'rgba(17,19,24,ALPHA)';
+        ctx.save();
+        ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
+        for (let lat = -60; lat <= 60; lat += 15) {
+          const coords = [];
+          for (let lon = -180; lon <= 180; lon += 3) coords.push([lat, lon]);
+          drawPath(coords, rotation, radius, cx, cy, line, lat === 0 ? .48 : .32, lat === 0 ? 1.2 : .9);
+        }
+        for (let lon = -180; lon < 180; lon += 20) {
+          const coords = [];
+          for (let lat = -82; lat <= 82; lat += 3) coords.push([lat, lon]);
+          drawPath(coords, rotation, radius, cx, cy, line, .30, .85);
+        }
+        ctx.restore();
+      }
+
+      function drawArc(from, to, rotation, radius, cx, cy) {
+        const steps = 44;
+        const coords = [];
+        for (let i = 0; i <= steps; i += 1) {
+          const t = i / steps;
+          const lift = Math.sin(t * Math.PI) * 14;
+          coords.push([
+            from.lat + (to.lat - from.lat) * t + lift,
+            from.lon + (to.lon - from.lon) * t
+          ]);
+        }
+        drawPath(coords, rotation, radius, cx, cy, 'rgba(107,150,255,ALPHA)', .42, 1.2);
+      }
+
+      function renderFrame(time = 0) {
+        const rotation = (time * (prefersReducedMotion ? 0 : .0065)) % 360;
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const dotRgb = dark ? '244,241,232' : '17,19,24';
+        const haloRgb = dark ? '107,150,255' : '40,103,216';
+        const fadeRgb = dark ? '5,6,8' : '255,255,255';
+        ctx.clearRect(0, 0, width, height);
+
+        const mobile = width < 760;
+        const radius = Math.min(width, height) * (mobile ? .76 : .88);
+        const cx = width * (mobile ? .60 : .80);
+        const cy = height * (mobile ? .74 : .56);
+
+        const halo = ctx.createRadialGradient(cx, cy, radius * .2, cx, cy, radius * 1.18);
+        halo.addColorStop(0, `rgba(${haloRgb},.30)`);
+        halo.addColorStop(.55, `rgba(${haloRgb},.10)`);
+        halo.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = halo;
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.clip();
+
+        drawGlobeFrame(rotation, radius, cx, cy);
+
+        ctx.globalCompositeOperation = dark ? 'screen' : 'source-over';
+        points.forEach((point) => {
+          const p = project(point.lat, point.lon, rotation, radius, cx, cy);
+          if (!p.visible) return;
+          const a = Math.min(1, Math.max(.18, (p.z + .18) / 1.18));
+          ctx.fillStyle = `rgba(${dotRgb},${a * (dark ? .95 : .72)})`;
+          ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+        });
+
+        drawArc(cities[0], cities[1], rotation, radius, cx, cy);
+        drawArc(cities[1], cities[2], rotation, radius, cx, cy);
+        drawArc(cities[2], cities[3], rotation, radius, cx, cy);
+
+        cities.forEach((city) => {
+          const p = project(city.lat, city.lon, rotation, radius, cx, cy);
+          if (!p.visible) return;
+          ctx.beginPath();
+          ctx.fillStyle = city.color;
+          ctx.arc(p.x, p.y, 4.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = dark ? 'rgba(244,241,232,.90)' : 'rgba(17,19,24,.82)';
+          ctx.font = '700 12px Inter, system-ui, sans-serif';
+          ctx.fillText(city.name, p.x + 8, p.y - 7);
+        });
+
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = dark ? 'rgba(244,241,232,.82)' : 'rgba(17,19,24,.56)';
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+
+        const fade = ctx.createLinearGradient(0, 0, width, 0);
+        fade.addColorStop(0, `rgba(${fadeRgb},${dark ? .90 : .72})`);
+        fade.addColorStop(.34, `rgba(${fadeRgb},${dark ? .54 : .42})`);
+        fade.addColorStop(.58, `rgba(${fadeRgb},${dark ? .12 : .14})`);
+        fade.addColorStop(1, `rgba(${fadeRgb},0)`);
+        ctx.fillStyle = fade;
+        ctx.fillRect(0, 0, width, height);
+
+        if (!prefersReducedMotion) rafId = requestAnimationFrame(renderFrame);
+      }
+
+      buildPoints();
+      resizeGlobe();
+      renderFrame();
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(rafId);
+        resizeGlobe();
+        renderFrame();
+      });
+    }
+
     function renderAxisStatus(cfg) {
+      const axisBase = activeAxisMode === 'official'
+        ? `${axisZoneName()} + lokalne sesje`
+        : `${axisZoneName()} / SMC`;
       axisStatus.innerHTML = `
         <div><span>Oś liczona dla</span><strong>${selectedDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })}</strong></div>
+        <div><span>Widok</span><strong>${activeAxisMode === 'official' ? 'Oficjalne sesje' : 'SMC / ICT'}</strong></div>
+        <div><span>Strefa osi</span><strong>${axisZoneName()}</strong></div>
+        <div><span>Baza osi</span><strong>${axisBase}</strong></div>
         <div><span>Relacja PL/NY</span><strong>${cfg.relation}</strong></div>
         <div><span>Teraz</span><strong>${nowLabelNy}</strong></div>
         <div><span>UTC</span><strong>NY ${utcLabel(cfg.nyUtc)} / PL ${utcLabel(cfg.plUtc)}</strong></div>
-        <div><span>London Open</span><strong>${asTime(cfg.londonOpenNy)} NY / 08:00 London</strong></div>
-        <div><span>Tokyo Open</span><strong>${asTime(cfg.tokyoOpenNy)} NY / 09:00 JST</strong></div>
-        <div><span>Marker</span><label class="axis-toggle"><input id="nowToggle" type="checkbox" ${showNowLine ? 'checked' : ''}>Pokaż teraz</label></div>
+        <div><span>Otwarcia rynków</span><strong>London ${axisTimeLabel(cfg.londonOpenNy)} / Tokyo ${axisTimeLabel(cfg.tokyoOpenNy)}</strong></div>
+        <div class="axis-marker-control"><span>Marker</span><label class="axis-toggle"><input id="nowToggle" type="checkbox" ${showNowLine ? 'checked' : ''}>Pokaż teraz</label></div>
       `;
       const nowToggle = document.querySelector('#nowToggle');
-      nowToggle.addEventListener('change', () => {
-        showNowLine = nowToggle.checked;
-        updateNowLinePosition();
-      });
+      if (nowToggle) {
+        nowToggle.addEventListener('change', () => {
+          showNowLine = nowToggle.checked;
+          updateNowLinePosition();
+        });
+      }
     }
 
     function nyToPl(value, cfg) {
@@ -3183,10 +4142,32 @@
       };
     }
 
+    function libraryLocalRange(timeZone, start, end, cfg) {
+      const range = localSessionRangeToNy(selectedDate, timeZone, start, end);
+      return libraryRange(range.start, range.end, cfg);
+    }
+
+    function libraryLocalMultiRange(timeZone, segments, cfg) {
+      const ranges = segments.map(([start, end]) => libraryLocalRange(timeZone, start, end, cfg));
+      return {
+        ny: ranges.map((range) => range.ny.replace(' NY', '')).join(' / ') + ' NY',
+        pl: ranges.map((range) => range.pl.replace(' PL', '')).join(' / ') + ' PL'
+      };
+    }
+
     function buildTimeItems(cfg) {
       const londonKz = libraryRange(cfg.londonOpenNy - 2, cfg.londonOpenNy + 2, cfg);
-      const xetra = libraryRange(cfg.londonOpenNy, cfg.londonFixNy + .5, cfg);
       const tokyo = libraryRange(cfg.tokyoOpenNy, cfg.tokyoOpenNy + 4, cfg);
+      const sydneyFx = libraryLocalRange('Australia/Sydney', 8, 17, cfg);
+      const tokyoFx = libraryLocalRange('Asia/Tokyo', 9, 18, cfg);
+      const londonFx = libraryLocalRange('Europe/London', 8, 17, cfg);
+      const newYorkFx = libraryLocalRange('America/New_York', 8, 17, cfg);
+      const lseCash = libraryLocalRange('Europe/London', 8, 16.5, cfg);
+      const xetraCash = libraryLocalRange('Europe/Berlin', 9, 17.5, cfg);
+      const hongKongCash = libraryLocalMultiRange('Asia/Hong_Kong', [[9.5, 12], [13, 16]], cfg);
+      const tokyoCash = libraryLocalMultiRange('Asia/Tokyo', [[9, 11.5], [12.5, 15]], cfg);
+      const sydneyCash = libraryLocalRange('Australia/Sydney', 10, 16, cfg);
+      const johannesburgCash = libraryLocalRange('Africa/Johannesburg', 9, 17, cfg);
       const macroTimes = [
         ['07:50', 7.833, 8.167, 'AM', 'Przed głównymi danymi 08:30 NY.'],
         ['08:50', 8.833, 9.167, 'AM', 'Po danych 08:30 NY, przed cash open.'],
@@ -3205,11 +4186,23 @@
         { title: 'Frankfurt / Early Europe', category: 'sessions', market: 'all', clock: 'europe', time: { ny: `${asTime(cfg.frankfurtNy)} NY`, pl: '08:00 PL' }, base: '08:00 Europe/PL', source: 'Europe local', tags: ['europe', 'london', 'forex', 'europe-index'], note: 'Start aktywności europejskiej przed właściwym London Open.' },
         { title: 'London Open', category: 'sessions', market: 'all', clock: 'europe', time: { ny: `${asTime(cfg.londonOpenNy)} NY`, pl: '09:00 PL' }, base: '08:00 London', source: 'London local', tags: ['europe', 'london', 'forex', 'europe-index'], note: 'Punkt odniesienia to 08:00 London, nie sztywne 03:00 NY.' },
         { title: 'London Open Killzone', category: 'sessions', market: 'futures', clock: 'europe', time: londonKz, base: 'London / Europe local', source: 'ICT', tags: ['europe', 'london', 'forex', 'fx'], note: 'Szerokie okno europejskiej zmienności dla FX.' },
-        { title: 'Xetra Cash Session', category: 'official', market: 'indices', clock: 'europe', time: xetra, base: '09:00-17:30 Frankfurt/PL', source: 'Deutsche Boerse / Xetra', tags: ['official-eu', 'europe-index', 'europe'], note: 'Oficjalna główna sesja cash Xetra dla niemieckiego rynku.' },
+        { title: 'Sydney Forex Session', category: 'official', market: 'futures', clock: 'tokyo', time: sydneyFx, base: '08:00-17:00 Sydney', source: 'Official Forex market hours', tags: ['official-fx', 'forex', 'fx', 'asia', 'sydney'], note: 'Oficjalna sesja FX liczona lokalnie według Sydney. To warstwa market-hours, osobna od Asian Killzone i ASR.' },
+        { title: 'Tokyo Forex Session', category: 'official', market: 'futures', clock: 'tokyo', time: tokyoFx, base: '09:00-18:00 JST', source: 'Official Forex market hours', tags: ['official-fx', 'forex', 'fx', 'asia', 'tokyo'], note: 'Oficjalna sesja FX liczona lokalnie według Tokyo. Tokyo nie zmienia czasu, więc jej pozycja względem NY zależy od czasu USA.' },
+        { title: 'London Forex Session', category: 'official', market: 'futures', clock: 'europe', time: londonFx, base: '08:00-17:00 London', source: 'Official Forex market hours', tags: ['official-fx', 'forex', 'fx', 'europe', 'london'], note: 'Oficjalny blok sesji London FX. W przejściach DST zostaje lokalnie taki sam, ale przesuwa się względem NY.' },
+        { title: 'New York Forex Session', category: 'official', market: 'futures', clock: 'ny', time: newYorkFx, base: '08:00-17:00 NY', source: 'Official Forex market hours', tags: ['official-fx', 'forex', 'fx', 'ny'], note: 'Oficjalny blok sesji New York FX. Dla danych USA i cash open nadal używaj dokładniejszych punktów 08:30 i 09:30 NY.' },
+        { title: 'Xetra Cash Session', category: 'official', market: 'indices', clock: 'europe', time: xetraCash, base: '09:00-17:30 Frankfurt/PL', source: 'Deutsche Boerse / Xetra', tags: ['official-eu', 'europe-index', 'europe', 'dax'], note: 'Oficjalna główna sesja cash Xetra dla niemieckiego rynku.' },
+        { title: 'London Stock Exchange Cash Session', category: 'official', market: 'indices', clock: 'europe', time: lseCash, base: '08:00-16:30 London', source: 'London Stock Exchange', tags: ['official-eu', 'europe-index', 'europe', 'london', 'ftse'], note: 'Oficjalna sesja cash rynku UK. Przy FTSE/UK100 ważniejsza niż 09:30 NY.' },
+        { title: 'NYSE / Nasdaq Cash Session', category: 'official', market: 'indices', clock: 'ny', time: libraryRange(9.5, 16, cfg), base: '09:30-16:00 NY', source: 'NYSE / Nasdaq', tags: ['official-us', 'us-index', 'indices', 'cash', 'ny'], note: 'Pełna regularna sesja cash akcji USA. 09:30 NY to start, ale oficjalny zakres trwa do 16:00 NY.' },
+        { title: 'CME Equity Index Futures RTH', category: 'cme', market: 'indices', clock: 'cme', time: libraryRange(9.5, 16.25, cfg), base: '09:30-16:15 NY / 08:30-15:15 CT', source: 'CME equity index futures', tags: ['cme-index', 'indices', 'us-index', 'official-us'], note: 'Regular trading hours dla futures indeksowych USA. To osobna warstwa od cash session NYSE/Nasdaq.' },
+        { title: 'Hong Kong Stock Exchange Cash Session', category: 'official', market: 'indices', clock: 'tokyo', time: hongKongCash, base: '09:30-12:00 / 13:00-16:00 HKT', source: 'Hong Kong Exchange', tags: ['official-asia', 'asia-index', 'hong-kong', 'indices'], note: 'Oficjalna sesja cash Hong Kong z przerwą lunchową. Przy azjatyckich indeksach nie zlewaj jej z Tokyo.' },
+        { title: 'Tokyo Stock Exchange Cash Session', category: 'official', market: 'indices', clock: 'tokyo', time: tokyoCash, base: '09:00-11:30 / 12:30-15:00 JST', source: 'Tokyo Stock Exchange', tags: ['official-asia', 'asia-index', 'tokyo', 'indices'], note: 'Oficjalna sesja cash Tokyo z przerwą lunchową. Tokyo nie zmienia czasu.' },
+        { title: 'ASX Sydney Cash Session', category: 'official', market: 'indices', clock: 'tokyo', time: sydneyCash, base: '10:00-16:00 Sydney', source: 'Australian Securities Exchange', tags: ['official-asia', 'asia-index', 'sydney', 'indices'], note: 'Oficjalna sesja cash Sydney. To osobny rynek od Tokyo, szczególnie ważny dla AUD i Australii.' },
+        { title: 'Johannesburg Stock Exchange Cash Session', category: 'official', market: 'indices', clock: 'europe', time: johannesburgCash, base: '09:00-17:00 Johannesburg', source: 'Johannesburg Stock Exchange', tags: ['official-eu', 'africa', 'indices'], note: 'Oficjalna sesja cash Johannesburg. Dodana do warstwy world stock market hours.' },
         { title: 'London Fix', category: 'official', market: 'all', clock: 'europe', time: { ny: `${asTime(cfg.londonFixNy)} NY`, pl: '17:00 PL' }, base: '16:00 London', source: 'London local', tags: ['fix', 'london', 'forex', 'europe'], note: 'Fixing walutowy i potencjalny przepływ przy końcu Londynu.' },
         { title: 'Tokyo Open', category: 'sessions', market: 'futures', clock: 'tokyo', time: { ny: `${asTime(cfg.tokyoOpenNy)} NY`, pl: cfg.tokyoOpenPl }, base: '09:00 JST', source: 'Tokyo local', tags: ['tokyo', 'asia', 'forex', 'fx'], note: 'Tokyo nie zmienia czasu, więc względem NY wypada 19:00 albo 20:00.' },
         { title: 'Asian Killzone - Tokyo version', category: 'sessions', market: 'futures', clock: 'tokyo', time: tokyo, base: '09:00-13:00 JST', source: 'Tokyo local', tags: ['tokyo', 'asia', 'forex', 'fx'], note: 'Wersja liczona od Tokyo, a nie sztywne 20:00-00:00 NY przez cały rok.' },
         { title: 'Asian Killzone - fixed NY', category: 'sessions', market: 'futures', clock: 'ny', time: libraryRange(20, 24, cfg), base: '20:00-00:00 NY', source: 'NY chart', tags: ['asia', 'forex', 'fx', 'ny'], note: 'Wersja oparta o stały wykres NY. W Polsce przechodzi na kolejny dzień.' },
+        { title: 'ASR - Asian Session Range', category: 'ict', market: 'futures', clock: 'ny', time: libraryRange(19, 24, cfg), base: '19:00-00:00 NY', source: 'ICT FX concept', tags: ['asr', 'forex', 'fx', 'asia', 'ny'], note: 'Stały box dla Forexu liczony 19:00-00:00 NY. To osobna parametryzacja range, nie Asian Killzone i nie Tokyo open.' },
         { title: 'NY Premarket', category: 'sessions', market: 'indices', clock: 'ny', time: libraryRange(7, 9.5, cfg), base: 'NY time', source: 'ICT / market context', tags: ['indices', 'us-index', 'ny', 'cash'], note: 'Okno przed cash open akcji USA.' },
         { title: 'USA Data / News Embargo', category: 'official', market: 'all', clock: 'ny', time: libraryPoint(8.5, cfg), base: '08:30 NY', source: 'US data calendar', tags: ['data', 'ny', 'us-index', 'forex', 'metal', 'commodity'], note: 'CPI, NFP, Claims, Retail Sales i inne high impact.' },
         { title: 'CME FX Futures RTH Open', category: 'cme', market: 'futures', clock: 'cme', time: libraryPoint(8.333, cfg), base: '08:20 NY / 07:20 CT', source: 'CME FX futures', tags: ['cme-fx', 'forex', 'fx'], note: 'Regular hours open dla FX futures, np. 6E, 6B, 6J.' },
@@ -3256,8 +4249,22 @@
       'Premarket': { full: 'NY Premarket', desc: 'Okno przed otwarciem cash session akcji USA. Istotne głównie dla indeksów i futures USA.' },
       'NY AM': { full: 'New York AM Session', desc: 'Główne poranne okno NY. Obejmuje dane USA, cash open i pierwszą fazę zmienności sesji USA.' },
       'NY PM': { full: 'New York PM Session', desc: 'Popołudniowe okno NY po lunchu. Często continuation albo reversal względem ruchu AM.' },
+      'US Cash Session': { full: 'US Equities Regular Cash Session', desc: 'Pełna regularna sesja cash akcji USA: 09:30-16:00 NY. Dla indeksów USA to główny oficjalny zakres dnia, a 09:30 jest punktem startu.' },
       'Xetra Cash': { full: 'Frankfurt / Xetra Cash Session', desc: 'Oficjalna główna sesja Xetra dla niemieckiego rynku kasowego: 09:00-17:30 czasu Frankfurt/PL. Na osi przeliczona dynamicznie na NY.' },
+      'LSE Cash': { full: 'London Stock Exchange Cash Session', desc: 'Oficjalny zakres cash dla rynku UK liczony lokalnie według Londynu. Na osi przeliczany dynamicznie na NY.' },
+      'Sydney Session': { full: 'Sydney Forex Session', desc: 'Oficjalny blok sesyjny Forex liczony lokalnie według Sydney. To warstwa market-hours, nie killzone.' },
+      'Tokyo Session': { full: 'Tokyo Forex Session', desc: 'Oficjalny blok sesyjny Forex liczony lokalnie według Tokyo/JST. Tokyo nie zmienia czasu.' },
+      'London Session': { full: 'London Forex Session', desc: 'Oficjalny blok sesyjny Forex liczony lokalnie według Londynu. W okresach przejściowych przesuwa się względem NY.' },
+      'New York Session': { full: 'New York Forex Session', desc: 'Oficjalny blok sesyjny Forex liczony według New York time.' },
+      'CME Equity RTH': { full: 'CME Equity Index Futures RTH', desc: 'Regular trading hours dla futures indeksowych USA. To oficjalna warstwa giełdowa, osobna od killzone i makr.' },
+      'NYSE / Nasdaq': { full: 'NYSE / Nasdaq Regular Cash Session', desc: 'Regularna sesja cash akcji USA: 09:30-16:00 New York. To giełdowa warstwa oficjalna, nie killzone.' },
+      'London Stock Exchange': { full: 'London Stock Exchange Cash Session', desc: 'Oficjalna sesja rynku UK liczona lokalnie według Londynu: 08:00-16:30 London.' },
+      'Hong Kong Exchange': { full: 'Hong Kong Stock Exchange Session', desc: 'Oficjalna sesja cash Hong Kong z przerwą lunchową. Na mapie pokazana jako dwa segmenty.' },
+      'Tokyo Stock Exchange': { full: 'Tokyo Stock Exchange Session', desc: 'Oficjalna sesja cash Tokyo z przerwą lunchową. Tokyo nie zmienia czasu.' },
+      'ASX Sydney': { full: 'Australian Securities Exchange Session', desc: 'Oficjalna sesja cash Sydney liczona lokalnie według Australia/Sydney.' },
+      'Johannesburg Stock Exchange': { full: 'Johannesburg Stock Exchange Session', desc: 'Oficjalna sesja cash Johannesburg liczona lokalnie według South Africa Standard Time.' },
       'Asian Killzone': { full: 'Asian Killzone / Tokyo window', desc: 'Okno azjatyckie liczone od Tokyo. Tokyo nie zmienia czasu, dlatego względem NY start może wypadać o 19:00 albo 20:00.' },
+      'ASR': { full: 'Asian Session Range', desc: 'Stały box Forex 19:00-00:00 NY. ASR jest osobną parametryzacją range, niezależną od Tokyo Open i niezależną od zmian czasu.' },
       'London Fix': { full: 'London Fix', desc: 'Fixing walutowy około 16:00 London. Lokalnie dla Polski najczęściej 17:00, ale względem NY przesuwa się w okresach przejściowych.' },
       'NY Open KZ': { full: 'New York Open Killzone', desc: 'Główne okno NY dla Forexu i FX futures, szczególnie wokół danych USA oraz otwarcia akcji.' },
       'NY Silver': { full: 'NY Silver Bullet', desc: 'Jeden z trzech Silver Bulletów w tej tabeli. Okno 10:00-11:00 NY.' },
@@ -3271,7 +4278,7 @@
       'NY SB': { full: 'NY Silver Bullet', desc: 'Jeden z trzech Silver Bulletów. Okno 10:00-11:00 NY.' },
       'PM SB': { full: 'PM Silver Bullet', desc: 'Jeden z trzech Silver Bulletów. Okno 14:00-15:00 NY.' },
       '08:30 data': { full: 'USA Data / News Embargo', desc: 'Czas najważniejszych danych USA, np. CPI, NFP, Claims, Retail Sales.' },
-      '09:30 cash': { full: 'US Equities Cash Open', desc: 'Otwarcie rynku akcji USA. Kluczowe dla indeksów, nie jest to Forex open.' },
+      '09:30 cash': { full: 'US Equities Cash Open', desc: 'Punkt startu regularnej sesji akcji USA o 09:30 NY. Sam pełny zakres cash session to 09:30-16:00 NY.' },
       '10:00 NY Cut': { full: 'NY Cut / FX Options Expiry', desc: 'Codzienny moment wygasania opcji FX OTC. Może wzmacniać reakcję wokół 09:50-10:10.' },
       'Bond Close': { full: 'Bond Closing Hour', desc: 'Okno zamykania sesji futures na obligacje USA. Może wpływać na indeksy, USD i złoto.' }
     };
@@ -3295,6 +4302,29 @@
       };
     });
 
+    let axisShiftHours = 0;
+
+    function axisHour(value) {
+      return ((value + axisShiftHours) % 24 + 24) % 24;
+    }
+
+    function axisTimeLabel(nyHour) {
+      const axisLabel = `${asTime(nyHour + axisShiftHours)} ${axisZoneLabel()}`;
+      const nyLabel = `${asTime(nyHour)} NY`;
+      return activeAxisZone === 'ny' ? nyLabel : `${axisLabel} / ${nyLabel}`;
+    }
+
+    function axisRangeLabel(start, end) {
+      const axisLabel = `${asTime(start + axisShiftHours)}-${asTime(end + axisShiftHours)} ${axisZoneLabel()}`;
+      const nyLabel = `${asTime(start)}-${asTime(end)} NY`;
+      return activeAxisZone === 'ny' ? nyLabel : `${axisLabel} / ${nyLabel}`;
+    }
+
+    function axisBarSegment(label, displayStart, displayEnd, cls, size, timeLabel, desc, full) {
+      const width = displayEnd - displayStart;
+      return `<span class="axis-bar ${cls} ${size}" tabindex="0" data-label="${label}" data-full="${full.full}" data-time="${timeLabel}" data-desc="${desc}" style="--start:${(displayStart / 24) * 100}%;--width:${(width / 24) * 100}%">${size ? '' : label}</span>`;
+    }
+
     function bar(label, start, end, cls) {
       if (end <= start) {
         return `${bar(label, start, 24, cls)}${bar(label, 0, end, cls)}`;
@@ -3302,7 +4332,19 @@
       const duration = end - start;
       const size = duration < .75 ? 'tiny' : duration < 1.4 ? 'compact' : '';
       const full = axisInfo[label] || { full: label, desc: 'Okno czasowe na osi sesji.' };
-      return `<span class="axis-bar ${cls} ${size}" tabindex="0" data-label="${label}" data-full="${full.full}" data-time="${asTime(start)}-${asTime(end)} NY" data-desc="${full.desc}" style="--start:${(start / 24) * 100}%;--width:${(duration / 24) * 100}%">${size ? '' : label}</span>`;
+      const displayStart = axisHour(start);
+      const displayEnd = axisHour(end);
+      const timeLabel = axisRangeLabel(start, end);
+      if (displayEnd <= displayStart) {
+        return `${axisBarSegment(label, displayStart, 24, cls, size, timeLabel, full.desc, full)}${axisBarSegment(label, 0, displayEnd, cls, size, timeLabel, full.desc, full)}`;
+      }
+      return axisBarSegment(label, displayStart, displayEnd, cls, size, timeLabel, full.desc, full);
+    }
+
+    function point(label, hour, cls) {
+      const full = axisInfo[label] || { full: label, desc: 'Punkt czasowy na osi sesji.' };
+      const displayHour = axisHour(hour);
+      return `<span class="axis-bar ${cls} axis-point" tabindex="0" data-label="${label}" data-full="${full.full}" data-time="${axisTimeLabel(hour)}" data-desc="${full.desc}" style="--start:${(displayHour / 24) * 100}%"></span>`;
     }
 
     function pin(hour) {
@@ -3310,8 +4352,15 @@
     }
 
     let nowHourNy = 0;
+    let nowHourAxis = 0;
     let nowLabelNy = '00:00 NY';
     let showNowLine = true;
+
+    function axisHourLabels() {
+      return [0, 4, 8, 12, 16, 20, 24].map((hour, index) => (
+        `<span>${String(hour).padStart(2, '0')}${index === 0 ? ` ${axisZoneLabel()}` : ''}</span>`
+      )).join('');
+    }
 
     function axisRow(label, bars) {
       return `
@@ -3319,35 +4368,268 @@
           <div class="axis-label">${label}</div>
           <div>
             <div class="axis-track">${bars.join('')}</div>
-            <div class="axis-hours"><span>00 NY</span><span>04</span><span>08</span><span>12</span><span>16</span><span>20</span><span>24</span></div>
+            <div class="axis-hours">${axisHourLabels()}</div>
           </div>
         </div>
       `;
     }
 
+    function officialSessionData() {
+      const sydneyFx = localSessionRangeToNy(selectedDate, 'Australia/Sydney', 8, 17);
+      const tokyoFx = localSessionRangeToNy(selectedDate, 'Asia/Tokyo', 9, 18);
+      const londonFx = localSessionRangeToNy(selectedDate, 'Europe/London', 8, 17);
+      const newYorkFx = localSessionRangeToNy(selectedDate, 'America/New_York', 8, 17);
+      const xetra = localSessionRangeToNy(selectedDate, 'Europe/Berlin', 9, 17.5);
+      const lse = localSessionRangeToNy(selectedDate, 'Europe/London', 8, 16.5);
+      const hongKongAm = localSessionRangeToNy(selectedDate, 'Asia/Hong_Kong', 9.5, 12);
+      const hongKongPm = localSessionRangeToNy(selectedDate, 'Asia/Hong_Kong', 13, 16);
+      const tokyoAm = localSessionRangeToNy(selectedDate, 'Asia/Tokyo', 9, 11.5);
+      const tokyoPm = localSessionRangeToNy(selectedDate, 'Asia/Tokyo', 12.5, 15);
+      const sydneyAsx = localSessionRangeToNy(selectedDate, 'Australia/Sydney', 10, 16);
+      const johannesburg = localSessionRangeToNy(selectedDate, 'Africa/Johannesburg', 9, 17);
+
+      return {
+        fx: [
+          { label: 'Sydney Session', display: 'Sydney', region: 'Pacific', cls: 'asia', segments: [sydneyFx] },
+          { label: 'Tokyo Session', display: 'Tokyo', region: 'Asia', cls: 'asia', segments: [tokyoFx] },
+          { label: 'London Session', display: 'London', region: 'Europe', cls: 'eu', segments: [londonFx] },
+          { label: 'New York Session', display: 'New York', region: 'America', cls: 'ny', segments: [newYorkFx] }
+        ],
+        stocks: [
+          { label: 'NYSE / Nasdaq', display: 'NYSE / Nasdaq', region: 'America', cls: 'ny', segments: [{ start: 9.5, end: 16 }] },
+          { label: 'London Stock Exchange', display: 'London', region: 'Europe', cls: 'eu', segments: [lse] },
+          { label: 'Xetra Cash', display: 'Xetra', region: 'Europe', cls: 'eu', segments: [xetra] },
+          { label: 'Hong Kong Exchange', display: 'Hong Kong', region: 'Asia', cls: 'asia', segments: [hongKongAm, hongKongPm] },
+          { label: 'Tokyo Stock Exchange', display: 'Tokyo', region: 'Asia', cls: 'asia', segments: [tokyoAm, tokyoPm] },
+          { label: 'ASX Sydney', display: 'Sydney', region: 'Pacific', cls: 'asia', segments: [sydneyAsx] },
+          { label: 'Johannesburg Stock Exchange', display: 'Johannesburg', region: 'Africa', cls: 'eu', segments: [johannesburg] }
+        ]
+      };
+    }
+
+    function sessionIntervals(segment) {
+      const end = segment.end <= segment.start ? segment.end + 24 : segment.end;
+      return [-24, 0, 24].map((shift) => ({
+        start: segment.start + shift,
+        end: end + shift
+      }));
+    }
+
+    function overlapBetween(a, b) {
+      const overlaps = [];
+      a.segments.forEach((aSegment) => {
+        b.segments.forEach((bSegment) => {
+          sessionIntervals(aSegment).forEach((aRange) => {
+            sessionIntervals(bSegment).forEach((bRange) => {
+              const start = Math.max(aRange.start, bRange.start);
+              const end = Math.min(aRange.end, bRange.end);
+              if (end > start && end > 0 && start < 24) {
+                overlaps.push({ start: Math.max(start, 0), end: Math.min(end, 24) });
+              }
+            });
+          });
+        });
+      });
+      return overlaps
+        .filter((range, index, arr) => arr.findIndex((item) => Math.abs(item.start - range.start) < .01 && Math.abs(item.end - range.end) < .01) === index)
+        .sort((a, b) => a.start - b.start);
+    }
+
+    function overlapLine(a, b) {
+      const ranges = overlapBetween(a, b);
+      if (!ranges.length) return '';
+      const labels = ranges.map((range) => axisRangeLabel(range.start, range.end)).join(' + ');
+      return `<p><strong>${a.display} & ${b.display}</strong> ${labels}</p>`;
+    }
+
+    function sessionIsOpen(session) {
+      return session.segments.some((segment) => {
+        const intervals = sessionIntervals(segment);
+        return intervals.some((range) => nowHourNy >= range.start && nowHourNy < range.end);
+      });
+    }
+
+    function marketMapSegment(session, displayStart, displayEnd, timeLabel) {
+      const width = displayEnd - displayStart;
+      const full = axisInfo[session.label] || { full: session.label, desc: 'Oficjalna sesja rynku.' };
+      const size = width < .75 ? 'tiny' : width < 1.4 ? 'compact' : '';
+      return `<span class="axis-bar ${session.cls} ${size}" tabindex="0" data-label="${session.display}" data-full="${full.full}" data-time="${timeLabel}" data-desc="${full.desc}" style="--start:${(displayStart / 24) * 100}%;--width:${(width / 24) * 100}%">${size ? '' : session.display}</span>`;
+    }
+
+    function marketMapBar(session, segment) {
+      const displayStart = axisHour(segment.start);
+      const displayEnd = axisHour(segment.end);
+      const timeLabel = axisRangeLabel(segment.start, segment.end);
+      if (displayEnd <= displayStart) {
+        return `${marketMapSegment(session, displayStart, 24, timeLabel)}${marketMapSegment(session, 0, displayEnd, timeLabel)}`;
+      }
+      return marketMapSegment(session, displayStart, displayEnd, timeLabel);
+    }
+
+    function renderMarketMapCard(title, description, sessions, overlapPairs) {
+      const rows = sessions.map((session) => `
+        <div class="market-row">
+          <div class="market-name">${session.display}</div>
+          <div class="market-track" data-region="${session.region}">
+            ${session.segments.map((segment) => marketMapBar(session, segment)).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      const legend = sessions.map((session) => `
+        <div class="legend-item">
+          <span class="legend-swatch ${session.cls}" style="--swatch: var(--${session.cls === 'ny' ? 'ny' : session.cls === 'eu' ? 'eu' : 'asia'});"></span>
+          <span>${session.display} - ${sessionIsOpen(session) ? 'otwarte teraz' : 'zamknięte teraz'}</span>
+        </div>
+      `).join('');
+
+      const overlaps = overlapPairs
+        .map(([a, b]) => overlapLine(sessions[a], sessions[b]))
+        .filter(Boolean)
+        .join('');
+
+      return `
+        <section class="market-map" aria-label="${title}">
+          <div class="market-map-head">
+            <div>
+              <h3>${title}</h3>
+              <p>${description}</p>
+            </div>
+            <div class="market-clock">Teraz: ${nowLabelNy}</div>
+          </div>
+          <div class="market-map-body">
+            <span class="market-now-line" style="--now-ratio:${nowHourAxis / 24}" aria-hidden="true"></span>
+            <div class="market-ruler"><span>${axisZoneLabel()}</span>${Array.from({ length: 24 }, (_, hour) => `<span>${String(hour).padStart(2, '0')}</span>`).join('')}</div>
+            ${rows}
+            <div class="market-foot">
+              <div class="market-legend">${legend}</div>
+              <div class="market-overlaps">
+                <h4>Overlaps</h4>
+                ${overlaps || '<p>Brak aktywnego nakładania w tym układzie godzin.</p>'}
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderOfficialSessionMaps(axisMarket) {
+      if (activeAxisMode !== 'official') {
+        officialSessionMaps.innerHTML = '';
+        return;
+      }
+
+      const sessions = officialSessionData();
+      const cards = [];
+      if (axisMarket !== 'indices') {
+        cards.push(renderMarketMapCard(
+          'Forex Market Hours',
+          'Cztery główne centra FX pokazane osobno: Sydney, Tokyo, London i New York.',
+          sessions.fx,
+          [[0, 1], [1, 2], [2, 3]]
+        ));
+      }
+      if (axisMarket !== 'futures') {
+        cards.push(renderMarketMapCard(
+          'World Stock Market Hours',
+          'Główne oficjalne sesje cash dla indeksów i giełd światowych.',
+          sessions.stocks,
+          [[0, 1], [0, 2], [1, 2], [3, 4], [4, 5], [2, 3]]
+        ));
+      }
+      officialSessionMaps.innerHTML = cards.join('');
+      wireAxisDetails(officialSessionMaps);
+    }
+
     function updateNowLinePosition() {
+      document.querySelectorAll('.market-now-line').forEach((line) => {
+        line.classList.toggle('is-hidden', !showNowLine);
+      });
       const line = document.querySelector('#axisNowLine');
       const firstTrack = timeAxis.querySelector('.axis-track');
       if (!line || !firstTrack) return;
 
       const axisRect = timeAxis.getBoundingClientRect();
       const trackRect = firstTrack.getBoundingClientRect();
-      const x = trackRect.left - axisRect.left + (nowHourNy / 24) * trackRect.width;
+      const x = trackRect.left - axisRect.left + (nowHourAxis / 24) * trackRect.width;
       line.style.setProperty('--now-x', `${x}px`);
       line.dataset.now = nowLabelNy;
       line.setAttribute('aria-label', `Teraz: ${nowLabelNy}`);
       line.classList.toggle('is-hidden', !showNowLine);
     }
 
+    function renderOfficialAxis(cfg, axisMarket) {
+      const rows = [];
+      const sessions = officialSessionData();
+
+      if (axisMarket !== 'futures') {
+        rows.push(axisRow('Stock: NYSE / Nasdaq', [
+          bar('US Cash Session', 9.5, 16, 'ny')
+        ]));
+        rows.push(axisRow('Stock: London', [
+          ...sessions.stocks.find((session) => session.label === 'London Stock Exchange').segments.map((segment) => bar('London Stock Exchange', segment.start, segment.end, 'eu'))
+        ]));
+        rows.push(axisRow('Stock: Xetra', [
+          ...sessions.stocks.find((session) => session.label === 'Xetra Cash').segments.map((segment) => bar('Xetra Cash', segment.start, segment.end, 'eu'))
+        ]));
+        rows.push(axisRow('Stock: Asia / Pacific', [
+          ...sessions.stocks
+            .filter((session) => ['Hong Kong Exchange', 'Tokyo Stock Exchange', 'ASX Sydney'].includes(session.label))
+            .flatMap((session) => session.segments.map((segment) => bar(session.label, segment.start, segment.end, 'asia')))
+        ]));
+        rows.push(axisRow('Stock: Johannesburg', [
+          ...sessions.stocks.find((session) => session.label === 'Johannesburg Stock Exchange').segments.map((segment) => bar('Johannesburg Stock Exchange', segment.start, segment.end, 'eu'))
+        ]));
+      }
+
+      if (axisMarket !== 'indices') {
+        rows.push(axisRow('Forex: Sydney', [
+          ...sessions.fx.find((session) => session.label === 'Sydney Session').segments.map((segment) => bar('Sydney Session', segment.start, segment.end, 'asia'))
+        ]));
+        rows.push(axisRow('Forex: Tokyo', [
+          ...sessions.fx.find((session) => session.label === 'Tokyo Session').segments.map((segment) => bar('Tokyo Session', segment.start, segment.end, 'asia'))
+        ]));
+        rows.push(axisRow('Forex: London', [
+          ...sessions.fx.find((session) => session.label === 'London Session').segments.map((segment) => bar('London Session', segment.start, segment.end, 'eu'))
+        ]));
+        rows.push(axisRow('Forex: New York', [
+          ...sessions.fx.find((session) => session.label === 'New York Session').segments.map((segment) => bar('New York Session', segment.start, segment.end, 'ny'))
+        ]));
+        rows.push(axisRow('CME FX futures', [
+          bar('RTH 08:20', 8.333, 8.75, 'cme'),
+          bar('Break', 17, 18, 'cme'),
+          bar('Reopen', 18, 18.4, 'cme')
+        ]));
+      }
+
+      return rows;
+    }
+
     function renderTimeAxis() {
       selectedDate = new Date();
       const cfg = classifyDate(selectedDate);
       const rows = [];
+      axisShiftHours = axisZoneOffset(cfg);
       nowHourNy = currentNyHour(cfg);
-      nowLabelNy = `${asTime(nowHourNy)} NY / ${nyToPl(nowHourNy, cfg)} PL`;
+      nowHourAxis = axisHour(nowHourNy);
+      nowLabelNy = activeAxisZone === 'ny'
+        ? `${asTime(nowHourNy)} NY / ${nyToPl(nowHourNy, cfg)} PL`
+        : `${asTime(nowHourAxis)} ${axisZoneLabel()} / ${asTime(nowHourNy)} NY`;
       renderAxisStatus(cfg);
+      const axisMarket = activeAxisMarket;
 
-      if (activeMarket !== 'futures') {
+      if (activeAxisMode === 'official') {
+        renderOfficialSessionMaps(axisMarket);
+        timeAxis.innerHTML = '';
+        timeAxis.classList.add('hidden');
+        showAxisEmpty();
+        requestAnimationFrame(updateNowLinePosition);
+        return;
+      }
+
+      timeAxis.classList.remove('hidden');
+      officialSessionMaps.innerHTML = '';
+      if (axisMarket !== 'futures') {
         rows.push(axisRow('Indeksy: Europa', [
           bar('London KZ', cfg.frankfurtNy, cfg.frankfurtNy + 3, 'eu')
         ]));
@@ -3360,9 +4642,15 @@
           bar('NY Lunch', 12, 13.5, 'ny'),
           bar('NY PM', 13, 16, 'ny')
         ]));
+        rows.push(axisRow('Indeksy: US cash', [
+          bar('US Cash Session', 9.5, 16, 'ny')
+        ]));
       }
 
-      if (activeMarket !== 'indices') {
+      if (axisMarket !== 'indices') {
+        rows.push(axisRow('FX: ASR', [
+          bar('ASR', 19, 24, 'asia')
+        ]));
         rows.push(axisRow('FX: Asia / Tokyo', [
           bar('Asian Killzone', cfg.tokyoOpenNy, cfg.tokyoOpenNy + 4 > 24 ? cfg.tokyoOpenNy + 4 - 24 : cfg.tokyoOpenNy + 4, 'asia')
         ]));
@@ -3408,9 +4696,9 @@
 
       rows.push(axisRow('Stałe punkty NY', [
         pin(0),
-        bar('08:30 data', 8.5, 8.62, 'ny'),
-        bar('09:30 cash', 9.5, 9.65, 'ny'),
-        bar('10:00 NY Cut', 10, 10.12, 'ny'),
+        point('08:30 data', 8.5, 'ny'),
+        point('09:30 cash', 9.5, 'ny'),
+        point('10:00 NY Cut', 10, 'ny'),
         bar('Bond Close', 15, 16, 'cme')
       ]));
 
@@ -3458,8 +4746,10 @@
       positionAxisDetails(el);
     }
 
-    function wireAxisDetails() {
-      document.querySelectorAll('.axis-bar').forEach((el) => {
+    function wireAxisDetails(scope = document) {
+      scope.querySelectorAll('.axis-bar').forEach((el) => {
+        if (el.dataset.detailsBound === 'true') return;
+        el.dataset.detailsBound = 'true';
         el.addEventListener('mouseenter', () => showAxisDetails(el));
         el.addEventListener('mouseleave', showAxisEmpty);
         el.addEventListener('focus', () => showAxisDetails(el));
@@ -3525,9 +4815,18 @@
         'cme-energy': 'CME Energy',
         'official-us': 'US official',
         'official-eu': 'EU official',
+        'official-fx': 'Official FX',
+        'official-asia': 'Asia official',
+        'asia-index': 'Indeksy Asia',
+        'hong-kong': 'Hong Kong',
+        sydney: 'Sydney',
+        dax: 'DAX',
+        ftse: 'FTSE',
+        africa: 'Africa',
         silver: 'Silver Bullet',
         lunch: 'Lunch',
         'ny-cut': 'NY Cut',
+        asr: 'ASR',
         cbdr: 'CBDR',
         fix: 'Fix',
         bond: 'Bonds'
@@ -3577,6 +4876,38 @@
         `<option value="${profile.id}">${profile.label}</option>`
       )).join('');
       libraryInstrument.value = activeLibraryInstrument;
+      libraryInstrumentSearch.value = currentProfile().label;
+      libraryInstrumentSuggestions.innerHTML = '';
+      closeLibrarySuggestions();
+    }
+
+    function renderLibrarySuggestions(query) {
+      const normalized = query.trim().toLowerCase();
+      const options = libraryProfiles
+        .filter((profile) => `${profile.label} ${profile.id} ${profile.summary}`.toLowerCase().includes(normalized))
+        .slice(0, 8);
+
+      libraryInstrumentSuggestions.innerHTML = options.map((profile) => `
+        <button class="combo-option ${profile.id === activeLibraryInstrument ? 'is-active' : ''}" type="button" role="option" data-profile="${profile.id}" aria-selected="${profile.id === activeLibraryInstrument ? 'true' : 'false'}">
+          <strong>${profile.label}</strong>
+          <span>${profile.summary}</span>
+        </button>
+      `).join('');
+      libraryInstrumentSuggestions.classList.toggle('is-open', options.length > 0);
+      libraryInstrumentSearch.setAttribute('aria-expanded', options.length > 0 ? 'true' : 'false');
+    }
+
+    function closeLibrarySuggestions() {
+      libraryInstrumentSuggestions.classList.remove('is-open');
+      libraryInstrumentSearch.setAttribute('aria-expanded', 'false');
+    }
+
+    function selectLibraryProfile(profileId) {
+      activeLibraryInstrument = profileId;
+      libraryInstrument.value = profileId;
+      libraryInstrumentSearch.value = currentProfile().label;
+      closeLibrarySuggestions();
+      renderTimeLibrary();
     }
 
     function renderTimeLibrary() {
@@ -3655,12 +4986,25 @@
       });
     }
 
-    marketButtons.forEach((button) => {
+    axisMarketButtons.forEach((button) => {
       button.addEventListener('click', () => {
-        activeMarket = button.getAttribute('data-market');
-        setPressed(marketButtons, 'data-market', activeMarket);
+        activeAxisMarket = button.getAttribute('data-axis-market');
+        setPressed(axisMarketButtons, 'data-axis-market', activeAxisMarket);
         renderTimeAxis();
       });
+    });
+
+    axisModeButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeAxisMode = button.getAttribute('data-axis-mode');
+        setPressed(axisModeButtons, 'data-axis-mode', activeAxisMode);
+        renderTimeAxis();
+      });
+    });
+
+    axisZone.addEventListener('change', () => {
+      activeAxisZone = axisZone.value;
+      renderTimeAxis();
     });
 
     sectionButtons.forEach((button) => {
@@ -3669,20 +5013,6 @@
         setPressed(sectionButtons, 'data-filter', activeSection);
         applyFilters();
       });
-    });
-
-    const startYear = selectedYear - 1;
-    for (let year = startYear; year <= selectedYear + 6; year += 1) {
-      const option = document.createElement('option');
-      option.value = String(year);
-      option.textContent = String(year);
-      option.selected = year === selectedYear;
-      yearSelect.appendChild(option);
-    }
-
-    yearSelect.addEventListener('change', () => {
-      selectedYear = Number(yearSelect.value);
-      renderDSTTimeline();
     });
 
     function syncTimeViews() {
@@ -3694,8 +5024,32 @@
     }
 
     libraryInstrument.addEventListener('change', () => {
-      activeLibraryInstrument = libraryInstrument.value;
-      renderTimeLibrary();
+      selectLibraryProfile(libraryInstrument.value);
+    });
+
+    libraryInstrumentSearch.addEventListener('input', () => {
+      renderLibrarySuggestions(libraryInstrumentSearch.value);
+    });
+
+    libraryInstrumentSearch.addEventListener('focus', () => {
+      renderLibrarySuggestions(libraryInstrumentSearch.value);
+    });
+
+    libraryInstrumentSearch.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      const first = libraryInstrumentSuggestions.querySelector('.combo-option');
+      if (first) selectLibraryProfile(first.getAttribute('data-profile'));
+    });
+
+    libraryInstrumentSuggestions.addEventListener('click', (event) => {
+      const option = event.target.closest('.combo-option');
+      if (!option) return;
+      selectLibraryProfile(option.getAttribute('data-profile'));
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.combo-field')) closeLibrarySuggestions();
     });
 
     libraryClock.addEventListener('change', () => {
@@ -3746,6 +5100,7 @@
       applyFilters();
     });
     renderLibraryOptions();
+    initHeroGlobe();
     renderDSTTimeline();
     syncTimeViews();
     renderInstruments();
